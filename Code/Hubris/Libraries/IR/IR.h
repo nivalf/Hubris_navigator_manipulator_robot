@@ -11,8 +11,18 @@ class IR
     IR(int pin);
     void init();
     float read();
+    bool digitalRead();
   private:
+    // pin number
     int _pin;
+
+    // variables for digital conversion
+    int max;
+    int upper_cutoff;
+    int lower_cutoff;
+
+    // digital value
+    bool digitalValue;
 };
 
 #endif
