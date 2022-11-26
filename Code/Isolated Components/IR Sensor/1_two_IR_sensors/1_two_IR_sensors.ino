@@ -29,5 +29,4 @@ void loop(void) {
   Serial.print(' ');
   Serial.print(IR2Reading);
   Serial.println(' ');
- 
 }
