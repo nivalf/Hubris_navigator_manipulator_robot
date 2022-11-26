@@ -2,12 +2,12 @@
 #include "Ultrasonic.h"
 #include "NewPing.h"
 #include "Filters.h"
+#include "RunningAvg.h"
 
 // Constructor
-Ultrasonic::Ultrasonic(int trigPin, int echoPin) : NewPing(trigPin, echoPin, 400)
+Ultrasonic::Ultrasonic(int trigPin, int echoPin) : NewPing(trigPin, echoPin, 400), lowPassFilter(LOWPASS, 100), distanceRunningAvg()
 {
     filteredDistance = 0.0;
-    lowPassFilter = FilterOnePole(LOWPASS, 1000);
 }
 
 // get distance in cm
@@ -46,4 +46,9 @@ float Ultrasonic::getDistanceLowPassFiltered()
     lowPassFilter.input(getDistance());
 
     return lowPassFilter.output();
+}
+
+float Ultrasonic::getDistance_RunningAvg()
+{
+    return distanceRunningAvg.getAvg(getDistance());
 }

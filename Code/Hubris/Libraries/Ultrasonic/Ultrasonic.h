@@ -7,6 +7,7 @@
 
 #include "NewPing.h"
 #include "Filters.h"
+#include "RunningAvg.h"
 
 class Ultrasonic: public NewPing
 {
@@ -15,9 +16,11 @@ class Ultrasonic: public NewPing
     float getDistance();
     float getDistanceExpAvg();
     float getDistanceLowPassFiltered();
+    float getDistance_RunningAvg();
   private:
     float filteredDistance;
     FilterOnePole lowPassFilter;
+    RunningAvg distanceRunningAvg;
 };
 
 #endif

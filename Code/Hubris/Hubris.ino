@@ -21,6 +21,7 @@ bool IR2DigitalReading;
 float distance;
 float distance_expAvg;
 float distance_lpf;
+float distance_ra;
 
 IR IRLeft(IRLeftAPin);
 IR IRRight(IRRightAPin);
@@ -46,6 +47,7 @@ void loop(void) {
   distance = Sonar.getDistance();
   distance_expAvg = Sonar.getDistanceExpAvg();
   distance_lpf = Sonar.getDistanceLowPassFiltered();
+  distance_ra = Sonar.getDistance_RunningAvg();
   
   // Serial.print(IR1Reading);
   // Serial.print(' ');
@@ -60,6 +62,8 @@ void loop(void) {
   Serial.print(distance_expAvg);
   Serial.print(' ');
   Serial.print(distance_lpf);
+  Serial.print(' ');
+  Serial.print(distance_ra);
   Serial.print(' ');
   Serial.print(millis() - timestamp);
   Serial.println(' ');
