@@ -5,17 +5,17 @@
 // include Arduino library
 #include "Arduino.h"
 
-class Ultrasonic
+#include "NewPing.h"
+
+class Ultrasonic: public NewPing
 {
   public:
     Ultrasonic(int echoPin, int trigPin);
-    void init();
     float getDistance();
   private:
     // pin number
     int _echoPin;
     int _trigPin;
-    int _maxDistance;
 };
 
 #endif
