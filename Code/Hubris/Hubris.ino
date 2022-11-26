@@ -1,5 +1,6 @@
 #include "IR.h"
 #include "Ultrasonic.h"
+#include "Filters.h"
 
 #define IRLeftAPin A4
 #define IRRightAPin A5
@@ -10,12 +11,16 @@
 float IR1Reading;      // the analog reading from the IR sensor
 float IR2Reading;      // the analog reading from the IR sensor
 
+long timestamp;
+
 // digital readings
 bool IR1DigitalReading;
 bool IR2DigitalReading;
 
 // distance reading
 float distance;
+float distance_expAvg;
+float distance_lpf;
 
 IR IRLeft(IRLeftAPin);
 IR IRRight(IRRightAPin);
@@ -30,6 +35,7 @@ void setup(void) {
 }
  
 void loop(void) {
+  timestamp = millis();
 
   IR1Reading = IRLeft.read();
   IR2Reading = IRRight.read();
@@ -38,16 +44,24 @@ void loop(void) {
   IR2DigitalReading = IRRight.digitalRead();
 
   distance = Sonar.getDistance();
+  distance_expAvg = Sonar.getDistanceExpAvg();
+  distance_lpf = Sonar.getDistanceLowPassFiltered();
   
-  Serial.print(IR1Reading);
-  Serial.print(' ');
-  Serial.print(IR2Reading);
-  Serial.print(' ');
-  Serial.print(IR1DigitalReading * 300);  // *300 for visualising in the plot
-  Serial.print(' ');
-  Serial.print(IR2DigitalReading * 300);
-  Serial.print(' ');
+  // Serial.print(IR1Reading);
+  // Serial.print(' ');
+  // Serial.print(IR2Reading);
+  // Serial.print(' ');
+  // Serial.print(IR1DigitalReading * 300);  // *300 for visualising in the plot
+  // Serial.print(' ');
+  // Serial.print(IR2DigitalReading * 300);
+  // Serial.print(' ');
   Serial.print(distance);
+  Serial.print(' ');
+  Serial.print(distance_expAvg);
+  Serial.print(' ');
+  Serial.print(distance_lpf);
+  Serial.print(' ');
+  Serial.print(millis() - timestamp);
   Serial.println(' ');
 
   // delay(100);

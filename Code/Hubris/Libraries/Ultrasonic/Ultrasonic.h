@@ -6,16 +6,18 @@
 #include "Arduino.h"
 
 #include "NewPing.h"
+#include "Filters.h"
 
 class Ultrasonic: public NewPing
 {
   public:
     Ultrasonic(int echoPin, int trigPin);
     float getDistance();
+    float getDistanceExpAvg();
+    float getDistanceLowPassFiltered();
   private:
-    // pin number
-    int _echoPin;
-    int _trigPin;
+    float filteredDistance;
+    FilterOnePole lowPassFilter;
 };
 
 #endif
