@@ -15,6 +15,7 @@ class Ultrasonic
     // pin number
     int _echoPin;
     int _trigPin;
+    int _maxDistance;
 };
 
 #endif

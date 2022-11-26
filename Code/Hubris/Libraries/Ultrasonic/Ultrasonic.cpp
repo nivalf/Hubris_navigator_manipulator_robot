@@ -1,14 +1,13 @@
 #include "Arduino.h"
 #include "Ultrasonic.h"
+#include "NewPing.h"
 
 // Constructor
-Ultrasonic::Ultrasonic(int echoPin, int trigPin)
+Ultrasonic::Ultrasonic(int trigPin, int echoPin)
 {
-    pinMode(echoPin, INPUT);
-    pinMode(trigPin, OUTPUT);
-
     _echoPin = echoPin;
     _trigPin = trigPin;
+    _maxDistance = 400;
 }
 
 void Ultrasonic::init()
@@ -22,6 +21,7 @@ float Ultrasonic::getDistance()
     float distance;
     float duration;
 
+    pinMode(_trigPin, OUTPUT);
     // Clears the trigPin
     digitalWrite(_trigPin, LOW);
     delayMicroseconds(2);
@@ -32,6 +32,7 @@ float Ultrasonic::getDistance()
     delayMicroseconds(10);
     digitalWrite(_trigPin, LOW);
 
+    pinMode(_echoPin, INPUT);
     // Reads the echoPin, returns the sound wave travel time in microseconds
     duration = pulseIn(_echoPin, HIGH);
 
