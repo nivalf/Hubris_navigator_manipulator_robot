@@ -1,6 +1,7 @@
 #include "Arduino.h"
 #include "IR.h"
 
+// Constructor
 IR::IR(int pin)
 {
     pinMode(pin, INPUT);
