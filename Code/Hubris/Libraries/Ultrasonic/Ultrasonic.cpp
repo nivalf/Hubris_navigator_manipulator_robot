@@ -32,6 +32,7 @@ float Ultrasonic::getDistance()
     delayMicroseconds(10);
     digitalWrite(_trigPin, LOW);
 
+    // set the _echoPin as input. This is to enable using same pin for both input and output
     pinMode(_echoPin, INPUT);
     // Reads the echoPin, returns the sound wave travel time in microseconds
     duration = pulseIn(_echoPin, HIGH);
