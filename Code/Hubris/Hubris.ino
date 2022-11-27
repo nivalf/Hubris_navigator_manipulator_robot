@@ -1,5 +1,6 @@
 #include "IR.h"
 #include "Ultrasonic.h"
+#include "Motor.h"
 
 #define IRLeftAPin A4
 #define IRRightAPin A5
@@ -7,6 +8,12 @@
 // use same pin for trig & echo
 #define trigPin 9
 #define echoPin 9
+
+// pins for motor
+#define driverInputPin1 4
+#define driverInputPin2 5
+#define standbyPin 2
+#define pwmPin 3
 
 float IR1Reading;      // the analog reading from the IR sensor
 float IR2Reading;      // the analog reading from the IR sensor
@@ -26,6 +33,8 @@ IR IRLeft(IRLeftAPin);
 IR IRRight(IRRightAPin);
 
 Ultrasonic Sonar(trigPin, echoPin);
+
+Motor RightMotor(driverInputPin1, driverInputPin2, standbyPin, pwmPin);
  
 void setup(void) {
   Serial.begin(9600);   // We'll send debugging information via the Serial monitor
@@ -49,6 +58,19 @@ void loop(void) {
   delay(1);
   distance_ra = Sonar.getDistance_RunningAvg();
   delay(1);
+
+  RightMotor.reverse(50);
+  delay(3000);
+  // RightMotor.freeWheel();
+  // delay(3000);
+  // RightMotor.forward(200);
+  // delay(3000);
+  // RightMotor.brake();
+  // delay(3000);
+  // RightMotor.reverse(200);
+  // delay(3000);
+  // RightMotor.stop();
+  // delay(3000);
   
   // Serial.print(IR1Reading);
   // Serial.print(' ');
