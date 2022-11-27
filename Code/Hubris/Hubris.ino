@@ -34,7 +34,7 @@ IR IRRight(IRRightAPin);
 
 Ultrasonic Sonar(trigPin, echoPin);
 
-Motor RightMotor(driverInputPin1, driverInputPin2, standbyPin, pwmPin);
+Motor RightMotor(driverInputPin1, driverInputPin2,pwmPin, standbyPin);
  
 void setup(void) {
   Serial.begin(9600);   // We'll send debugging information via the Serial monitor

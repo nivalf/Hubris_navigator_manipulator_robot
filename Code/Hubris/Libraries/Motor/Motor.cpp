@@ -2,7 +2,7 @@
 #include "Arduino.h"
 
 // Constructor
-Motor::Motor(int driverInputPin1, int driverInputPin2, int standbyPin, int pwmPin): _driverInputPin1(driverInputPin1), _driverInputPin2(driverInputPin2), _standbyPin(standbyPin), _pwmPin(pwmPin)
+Motor::Motor(int driverInputPin1, int driverInputPin2,int pwmPin, int standbyPin ): _driverInputPin1(driverInputPin1), _driverInputPin2(driverInputPin2), _standbyPin(standbyPin), _pwmPin(pwmPin)
 {
     pinMode(_driverInputPin1, OUTPUT);
     pinMode(_driverInputPin2, OUTPUT);

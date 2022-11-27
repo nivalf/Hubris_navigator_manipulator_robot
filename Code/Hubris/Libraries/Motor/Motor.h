@@ -8,7 +8,7 @@
 class Motor
 {
   public:
-    Motor(int driverInputPin1, int driverInputPin2, int standbyPin, int pwmPin);
+    Motor(int driverInputPin1, int driverInputPin2,int pwmPin, int standbyPin);
     void forward(int speed);
     void reverse(int speed);
     void stop();
