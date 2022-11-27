@@ -4,6 +4,7 @@
 #define IRLeftAPin A4
 #define IRRightAPin A5
 
+// use same pin for trig & echo
 #define trigPin 9
 #define echoPin 9
 
