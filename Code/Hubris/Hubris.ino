@@ -1,6 +1,5 @@
 #include "IR.h"
 #include "Ultrasonic.h"
-#include "Filters.h"
 
 #define IRLeftAPin A4
 #define IRRightAPin A5
@@ -20,7 +19,6 @@ bool IR2DigitalReading;
 // distance reading
 float distance;
 float distance_expAvg;
-float distance_lpf;
 float distance_ra;
 
 IR IRLeft(IRLeftAPin);
@@ -45,9 +43,11 @@ void loop(void) {
   IR2DigitalReading = IRRight.digitalRead();
 
   distance = Sonar.getDistance();
+  delay(1);
   distance_expAvg = Sonar.getDistanceExpAvg();
-  distance_lpf = Sonar.getDistanceLowPassFiltered();
+  delay(1);
   distance_ra = Sonar.getDistance_RunningAvg();
+  delay(1);
   
   // Serial.print(IR1Reading);
   // Serial.print(' ');
@@ -60,8 +60,6 @@ void loop(void) {
   Serial.print(distance);
   Serial.print(' ');
   Serial.print(distance_expAvg);
-  Serial.print(' ');
-  Serial.print(distance_lpf);
   Serial.print(' ');
   Serial.print(distance_ra);
   Serial.print(' ');

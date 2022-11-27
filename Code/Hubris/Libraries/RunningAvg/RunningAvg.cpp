@@ -2,7 +2,7 @@
 #include "RunningAvg.h"
 
 // Constructor
-RunningAvg::RunningAvg() : bufferIndex(0), windowSize(100)
+RunningAvg::RunningAvg() : bufferIndex(0), windowSize(15)
 {
     // initialize buffer
     for (int i = 0; i < windowSize; i++)
@@ -23,6 +23,13 @@ float RunningAvg::getAvg(float currentVal)
     {
         sum += runningAverageBuffer[i];
     }
+
+    // Serial.print("sum: ");
+    // Serial.print(sum);
+    // Serial.print(" bufferIndex: ");
+    // Serial.print(bufferIndex);
+    // Serial.print(" currentVal: ");
+    // Serial.println(currentVal);
 
     return sum / windowSize;
 }

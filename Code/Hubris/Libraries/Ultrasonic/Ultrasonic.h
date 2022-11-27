@@ -6,7 +6,6 @@
 #include "Arduino.h"
 
 #include "NewPing.h"
-#include "Filters.h"
 #include "RunningAvg.h"
 
 class Ultrasonic: public NewPing
@@ -15,11 +14,9 @@ class Ultrasonic: public NewPing
     Ultrasonic(int echoPin, int trigPin);
     float getDistance();
     float getDistanceExpAvg();
-    float getDistanceLowPassFiltered();
     float getDistance_RunningAvg();
   private:
     float filteredDistance;
-    FilterOnePole lowPassFilter;
     RunningAvg distanceRunningAvg;
 };
 

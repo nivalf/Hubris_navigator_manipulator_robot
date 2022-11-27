@@ -11,7 +11,7 @@ class RunningAvg
     RunningAvg();
     float getAvg(float);
   private:
-    float runningAverageBuffer[100];
+    float runningAverageBuffer[15];
     int bufferIndex;
     int windowSize;
 };
