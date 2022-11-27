@@ -11,7 +11,9 @@
 class Robot
 {
 public:
-    Robot(int IRLeftPin, int IRRigthPin, int UltrasonicEchoPin, int UltrasonicTrigPin int MotorLeftPin1, int MotorLeftPin2, int MotorLeftStandbyPin, int MotorLeftPwmPin, int MotorRightPin1, int MotorRightPin2, int MotorRightStandbyPin, int MotorRightPwmPin);
+    Robot(int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int MotorLeftPin1, int MotorLeftPin2, int MotorLeftStandbyPin, int MotorLeftPwmPin, int MotorRightPin1, int MotorRightPin2, int MotorRightStandbyPin, int MotorRightPwmPin);
+    void init();
+    void testSensors();
 
 private:
     IR IRLeft;

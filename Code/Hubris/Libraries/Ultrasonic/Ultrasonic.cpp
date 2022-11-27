@@ -11,6 +11,9 @@ Ultrasonic::Ultrasonic(int trigPin, int echoPin) : NewPing(trigPin, echoPin, 400
 // get distance in cm
 float Ultrasonic::getDistance()
 {
+    // Sleep 1ms to allow for the ping to trigger, if it's triggered too soon it won't work.
+    delay(1);
+
     float duration;
     int iterations = 1;
 

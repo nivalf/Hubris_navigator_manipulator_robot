@@ -11,7 +11,7 @@
 class Ultrasonic: public NewPing
 {
   public:
-    Ultrasonic(int echoPin, int trigPin);
+    Ultrasonic(int trigPin, int echoPin);
     float getDistance();
     float getDistanceExpAvg();
     float getDistance_RunningAvg();
