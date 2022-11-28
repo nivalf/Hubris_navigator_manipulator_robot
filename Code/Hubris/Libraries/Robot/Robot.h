@@ -11,9 +11,14 @@
 class Robot
 {
 public:
-    Robot(int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int MotorLeftPin1, int MotorLeftPin2, int MotorLeftStandbyPin, int MotorLeftPwmPin, int MotorRightPin1, int MotorRightPin2, int MotorRightStandbyPin, int MotorRightPwmPin);
+    Robot(int speed, int turnSpeed, float steeringFactor, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int MotorLeftPin1, int MotorLeftPin2, int MotorLeftStandbyPin, int MotorLeftPwmPin, int MotorRightPin1, int MotorRightPin2, int MotorRightStandbyPin, int MotorRightPwmPin);
     void init();
     void testSensors();
+    void testMotors();
+    void moveForward();
+    void moveBackward();
+    void steerLeft();
+    void steerRight();    
 
 private:
     IR IRLeft;
@@ -21,6 +26,9 @@ private:
     Motor MotorLeft;
     Motor MotorRight;
     Ultrasonic UltrasonicFront;
+    int speed;
+    int turnSpeed;
+    float steeringFactor;
 };
 
 #endif

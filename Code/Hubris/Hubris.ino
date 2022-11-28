@@ -4,8 +4,8 @@
 #define IRLeftAPin A3
 #define IRRightAPin A4
 // use same pin for trig & echo
-#define trigPin 9
-#define echoPin 9
+#define trigPin 6
+#define echoPin 6
 // pins for left motor
 #define MotorLeftPin1 12
 #define MotorLeftPin2 13
@@ -17,7 +17,11 @@
 #define MotorRightStandbyPin 9
 #define MotorRightPWMPin 10
 
-Robot Hubris(IRLeftAPin, IRRightAPin, trigPin, echoPin, MotorLeftPin1, MotorLeftPin2, MotorLeftStandbyPin, MotorLeftPWMPin, MotorRightPin1, MotorRightPin2, MotorRightStandbyPin, MotorRightPWMPin);
+#define speed 150
+#define turnSpeed 200
+#define steeringFactor 0.8  // percentage
+
+Robot Hubris(speed, turnSpeed, steeringFactor, IRLeftAPin, IRRightAPin, trigPin, echoPin, MotorLeftPin1, MotorLeftPin2, MotorLeftStandbyPin, MotorLeftPWMPin, MotorRightPin1, MotorRightPin2, MotorRightStandbyPin, MotorRightPWMPin);
 
 long timestamp;
 
@@ -30,7 +34,10 @@ void setup(void) {
 void loop(void) {
   timestamp = millis();
 
-  Hubris.testSensors();
+  Hubris.steerLeft();
+  delay(2000);
+  Hubris.steerRight();
+  delay(2000);
 
   Serial.print("Runtime:");
   Serial.print(millis() - timestamp);

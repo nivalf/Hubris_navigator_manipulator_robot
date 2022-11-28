@@ -15,10 +15,10 @@ class Motor
     void brake();
     void freeWheel();
   private:
-    int _driverInputPin1;
-    int _driverInputPin2;
-    int _standbyPin;
-    int _pwmPin;
+    int driverInputPin1;
+    int driverInputPin2;
+    int standbyPin;
+    int pwmPin;
 };
 
 #endif
