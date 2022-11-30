@@ -11,24 +11,30 @@
 class Robot
 {
 public:
-    Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int MotorLeftPin1, int MotorLeftPin2, int MotorLeftStandbyPin, int MotorLeftPwmPin, int MotorLeftEncoderPin1, int MotorLeftEncoderPin2, int MotorRightPin1, int MotorRightPin2, int MotorRightStandbyPin, int MotorRightPwmPin, int MotorRightEncoderPin1, int MotorRightEncoderPin2);
+    Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int MotorLeftPin1, int MotorLeftPin2, int MotorLeftStandbyPin, int MotorLeftPwmPin, int MotorLeftEncoderChannelAPin, int MotorLeftEncoderChannelBPin, int MotorRightPin1, int MotorRightPin2, int MotorRightStandbyPin, int MotorRightPwmPin, int MotorRightEncoderChannelAPin, int MotorRightEncoderChannelBPin);
     void init();
+    // test
     void testIRSensors();
+    void testUltrasonicSensor();
     void testSensors();
     void testMotors();
+    // state
+    int getState();
+    void setState(int state);
+    // basic movement
     void moveForward();
     void moveBackward();
     void steerLeft();
     void steerRight(); 
     void stop();
+    // advanced movement
     void followLine();   
     int movetoBlackLine();
+    // motor & wheels
     Motor MotorLeft;
     Motor MotorRight;
     void getLeftWheelRotationCount();
     void getRightWheelRotationCount();
-    int getState();
-    void setState(int state);
 
 private:
     IR IRLeft;

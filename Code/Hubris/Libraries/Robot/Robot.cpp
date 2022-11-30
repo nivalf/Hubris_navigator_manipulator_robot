@@ -15,15 +15,15 @@
         MotorLeftPin2
         MotorLeftPWMPin
         MotorLeftStandbyPin
-        MotorLeftEncoderPin1
-        MotorLeftEncoderPin2
+        MotorLeftEncoderChannelAPin
+        MotorLeftEncoderChannelBPin
         -
         MotorRightPin1
         MotorRightPin2
         MotorRightPWMPin
         MotorRightStandbyPin
-        MotorRightEncoderPin1
-        MotorRightEncoderPin2
+        MotorRightEncoderChannelAPin
+        MotorRightEncoderChannelBPin
         -
         UltrasonicEchoPin
         UltrasonicTrigPin
@@ -35,7 +35,7 @@
         MotorRight
         UltrasonicFront
  */
-Robot::Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int MotorLeftPin1, int MotorLeftPin2, int MotorLeftStandbyPin, int MotorLeftPwmPin, int MotorLeftEncoderPin1, int MotorLeftEncoderPin2, int MotorRightPin1, int MotorRightPin2, int MotorRightStandbyPin, int MotorRightPwmPin, int MotorRightEncoderPin1, int MotorRightEncoderPin2) : 
+Robot::Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int MotorLeftPin1, int MotorLeftPin2, int MotorLeftStandbyPin, int MotorLeftPwmPin, int MotorLeftEncoderChannelAPin, int MotorLeftEncoderChannelBPin, int MotorRightPin1, int MotorRightPin2, int MotorRightStandbyPin, int MotorRightPwmPin, int MotorRightEncoderChannelAPin, int MotorRightEncoderChannelBPin) : 
 // private variables
 state(0),
 speed(speed), 
@@ -46,8 +46,8 @@ steeringCooloffTime(steeringCooloffTime),
 IRLeft(IRLeftPin), 
 IRRight(IRRightPin), 
 UltrasonicFront(UltrasonicEchoPin, UltrasonicTrigPin), 
-MotorLeft(MotorLeftPin1, MotorLeftPin2, MotorLeftPwmPin, MotorLeftStandbyPin, MotorLeftEncoderPin1, MotorLeftEncoderPin2), 
-MotorRight(MotorRightPin1, MotorRightPin2, MotorRightPwmPin, MotorRightStandbyPin, MotorRightEncoderPin1, MotorRightEncoderPin2)
+MotorLeft(MotorLeftPin1, MotorLeftPin2, MotorLeftPwmPin, MotorLeftStandbyPin, MotorLeftEncoderChannelAPin, MotorLeftEncoderChannelBPin), 
+MotorRight(MotorRightPin1, MotorRightPin2, MotorRightPwmPin, MotorRightStandbyPin, MotorRightEncoderChannelAPin, MotorRightEncoderChannelBPin)
 {
 }
 
@@ -60,6 +60,17 @@ void Robot::init()
     MotorRight.init();
 }
 
+// ***************** STATE ***************** //
+
+void Robot::setState(int state) {
+    this->state = state;
+}
+
+int Robot::getState() {
+    return this->state;
+}
+
+// ***************** TESTS ***************** //
 
 // Test the sensors & print the values
 void Robot::testIRSensors()
@@ -77,21 +88,8 @@ void Robot::testIRSensors()
     Serial.println(IRRight.digitalRead() * 300);
 }
 
-// Test the sensors & print the values
-void Robot::testSensors()
-{
-    Serial.print("IR_Left:");
-    Serial.print(IRLeft.read());
-    Serial.print(" ");
-    Serial.print("IR_Right:");
-    Serial.print(IRRight.read());
-    Serial.print(" ");
-    Serial.print("IR_Left(digital)*300:");
-    Serial.print(IRLeft.digitalRead() * 300);
-    Serial.print(" ");
-    Serial.print("IR_Right(digital)*300:");
-    Serial.print(IRRight.digitalRead() * 300);
-    Serial.print(" ");
+// Test ultrasonic sensor & print the values
+void Robot::testUltraSonicSensor(){
     Serial.print("Dist:");
     Serial.print(UltrasonicFront.getDistance());
     Serial.print(" ");
@@ -100,6 +98,13 @@ void Robot::testSensors()
     Serial.print(" ");
     Serial.print("Dist(running_avg):");
     Serial.println(UltrasonicFront.getDistance_RunningAvg());
+}
+
+// Test the sensors & print the values
+void Robot::testSensors()
+{
+    testIRSensors();
+    testUltraSonicSensor();
 }
 
 // Test the motors
@@ -131,14 +136,7 @@ void Robot::testMotors()
     delay(1000);
 }
 
-
-void Robot::setState(int state) {
-    this->state = state;
-}
-
-int Robot::getState() {
-    return this->state;
-}
+// ***************** BASIC MOVEMENT ***************** //
 
 // Move the robot forward
 void Robot::moveForward()
@@ -179,6 +177,8 @@ void Robot::stop()
     MotorLeft.brake();
     MotorRight.brake();
 }
+
+// ***************** ADVANCED MOVEMENT ***************** //
 
 // Line following
 void Robot::followLine()
@@ -221,13 +221,15 @@ int Robot::movetoBlackLine()
     }
 }
 
+// ***************** WHEELS ***************** //
+
+void Robot::countLeftEncoderChannel
+
 void Robot::getLeftWheelRotationCount()
 {
     Serial.print("Left wheel rotation: ");
     Serial.println(MotorLeft.getRotationCount());
 }
-
-
 
 void Robot::getRightWheelRotationCount()
 {

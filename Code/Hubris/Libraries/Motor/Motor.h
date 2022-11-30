@@ -8,25 +8,25 @@
 class Motor
 {
   public:
-    Motor(int driverInputPin1, int driverInputPin2,int pwmPin, int standbyPin, int encoderPin1, int encoderPin2);
+    Motor(int driverInputPin1, int driverInputPin2,int pwmPin, int standbyPin, int encoderPinChannelA, int encoderPinChannelB);
     void init();
     void forward(int speed);
     void reverse(int speed);
     void stop();
     void brake();
     void freeWheel();
-    void countEncoderChannel1();
-    void countEncoderChannel2();
+    void countEncoderChannelA();
+    void countEncoderChannelB();
     float getRotationCount();
   private:
     int driverInputPin1;
     int driverInputPin2;
     int standbyPin;
     int pwmPin;
-    int encoderPin1;
-    int encoderPin2;
-    int encoderPin1PrevState;
-    int encoderPin2PrevState;
+    int encoderPinChannelA;
+    int encoderPinChannelB;
+    int encoderPinChannelAPrevState;
+    int encoderPinChannelBPrevState;
     int encoderCount;
 };
 
