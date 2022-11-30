@@ -6,6 +6,7 @@
         speed: speed of the robot when moving forward or backward
         turnSpeed: speed of the robot when turning
         steeringFactor: the percentage difference between the speed of the left and right motors when turning
+        steeringCooloffTime: the time in milliseconds that the robot will wait after turning before moving forward again
 
         IRLeftpin
         IRRightpin
@@ -27,7 +28,7 @@
         MotorRight
         UltrasonicFront
  */
-Robot::Robot(int speed, int turnSpeed, float steeringFactor, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int MotorLeftPin1, int MotorLeftPin2, int MotorLeftStandbyPin, int MotorLeftPwmPin, int MotorRightPin1, int MotorRightPin2, int MotorRightStandbyPin, int MotorRightPwmPin) : speed(speed), turnSpeed(turnSpeed), steeringFactor(steeringFactor), IRLeft(IRLeftPin), IRRight(IRRightPin), UltrasonicFront(UltrasonicEchoPin, UltrasonicTrigPin), MotorLeft(MotorLeftPin1, MotorLeftPin2, MotorLeftPwmPin, MotorLeftStandbyPin), MotorRight(MotorRightPin1, MotorRightPin2, MotorRightPwmPin, MotorRightStandbyPin)
+Robot::Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int MotorLeftPin1, int MotorLeftPin2, int MotorLeftStandbyPin, int MotorLeftPwmPin, int MotorRightPin1, int MotorRightPin2, int MotorRightStandbyPin, int MotorRightPwmPin) : speed(speed), turnSpeed(turnSpeed), steeringFactor(steeringFactor), steeringCooloffTime(steeringCooloffTime), IRLeft(IRLeftPin), IRRight(IRRightPin), UltrasonicFront(UltrasonicEchoPin, UltrasonicTrigPin), MotorLeft(MotorLeftPin1, MotorLeftPin2, MotorLeftPwmPin, MotorLeftStandbyPin), MotorRight(MotorRightPin1, MotorRightPin2, MotorRightPwmPin, MotorRightStandbyPin)
 {
 }
 
@@ -36,6 +37,23 @@ void Robot::init()
 {
     IRLeft.init();
     IRRight.init();
+}
+
+
+// Test the sensors & print the values
+void Robot::testIRSensors()
+{
+    Serial.print("IR_Left:");
+    Serial.print(IRLeft.read());
+    Serial.print(" ");
+    Serial.print("IR_Right:");
+    Serial.print(IRRight.read());
+    Serial.print(" ");
+    Serial.print("IR_Left(digital)*300:");
+    Serial.print(IRLeft.digitalRead() * 300);
+    Serial.print(" ");
+    Serial.print("IR_Right(digital)*300:");
+    Serial.println(IRRight.digitalRead() * 300);
 }
 
 // Test the sensors & print the values
@@ -99,6 +117,7 @@ void Robot::moveForward()
     MotorRight.forward(speed);
 }
 
+
 // Move the robot backward
 void Robot::moveBackward()
 {
@@ -119,7 +138,55 @@ void Robot::steerLeft()
 void Robot::steerRight()
 {
     int reducedSpeed = speed * (1-steeringFactor);
-    
+
     MotorLeft.forward(speed);
     MotorRight.forward(reducedSpeed);
+}
+
+// Stop the bot
+void Robot::stop()
+{
+    MotorLeft.brake();
+    MotorRight.brake();
+}
+
+// Line following
+void Robot::followLine()
+{
+    int leftIR = IRLeft.digitalRead();      // 0 for black, 1 for white
+    int rightIR = IRRight.digitalRead();    // 0 for black, 1 for white
+
+    if (leftIR < rightIR)
+    {
+        steerLeft();
+        delay(steeringCooloffTime);
+    }
+    
+    if (rightIR < leftIR)
+    {
+        steerRight();
+        delay(steeringCooloffTime);
+    }
+    
+    if (rightIR == leftIR)
+    {
+        moveForward();
+    }
+}
+
+// Move to the blackLine
+int Robot::movetoBlackLine()
+{
+    int leftIR = IRLeft.digitalRead();
+    int rightIR = IRRight.digitalRead();
+
+    if(leftIR == 0 || rightIR == 0)
+    {
+        return 1;
+    }
+    else
+    {
+        moveForward();
+        return 0;
+    }
 }
