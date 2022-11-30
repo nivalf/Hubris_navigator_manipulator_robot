@@ -45,3 +45,4 @@ void Motor::stop()
     digitalWrite(standbyPin, LOW);
     analogWrite(pwmPin, 0);
 }
+

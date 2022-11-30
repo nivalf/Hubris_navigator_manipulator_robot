@@ -10,14 +10,21 @@
 
         IRLeftpin
         IRRightpin
+        -
         MotorLeftPin1
         MotorLeftPin2
         MotorLeftPWMPin
         MotorLeftStandbyPin
+        MotorLeftEncoderPin1
+        MotorLeftEncoderPin2
+        -
         MotorRightPin1
         MotorRightPin2
         MotorRightPWMPin
         MotorRightStandbyPin
+        MotorRightEncoderPin1
+        MotorRightEncoderPin2
+        -
         UltrasonicEchoPin
         UltrasonicTrigPin
 
@@ -28,7 +35,18 @@
         MotorRight
         UltrasonicFront
  */
-Robot::Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int MotorLeftPin1, int MotorLeftPin2, int MotorLeftStandbyPin, int MotorLeftPwmPin, int MotorRightPin1, int MotorRightPin2, int MotorRightStandbyPin, int MotorRightPwmPin) : speed(speed), turnSpeed(turnSpeed), steeringFactor(steeringFactor), steeringCooloffTime(steeringCooloffTime), IRLeft(IRLeftPin), IRRight(IRRightPin), UltrasonicFront(UltrasonicEchoPin, UltrasonicTrigPin), MotorLeft(MotorLeftPin1, MotorLeftPin2, MotorLeftPwmPin, MotorLeftStandbyPin), MotorRight(MotorRightPin1, MotorRightPin2, MotorRightPwmPin, MotorRightStandbyPin)
+Robot::Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int MotorLeftPin1, int MotorLeftPin2, int MotorLeftStandbyPin, int MotorLeftPwmPin, int MotorLeftEncoderPin1, int MotorLeftEncoderPin2, int MotorRightPin1, int MotorRightPin2, int MotorRightStandbyPin, int MotorRightPwmPin, int MotorRightEncoderPin1, int MotorRightEncoderPin2) : 
+// private variables
+speed(speed), 
+turnSpeed(turnSpeed), 
+steeringFactor(steeringFactor), 
+steeringCooloffTime(steeringCooloffTime), 
+// member classes
+IRLeft(IRLeftPin), 
+IRRight(IRRightPin), 
+UltrasonicFront(UltrasonicEchoPin, UltrasonicTrigPin), 
+MotorLeft(MotorLeftPin1, MotorLeftPin2, MotorLeftPwmPin, MotorLeftStandbyPin, MotorLeftEncoderPin1, MotorLeftEncoderPin2), 
+MotorRight(MotorRightPin1, MotorRightPin2, MotorRightPwmPin, MotorRightStandbyPin, MotorRightEncoderPin1, MotorRightEncoderPin2)
 {
 }
 
