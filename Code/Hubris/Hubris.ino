@@ -55,18 +55,30 @@ void setup(void) {
 void loop(void) {
   timestamp = millis();
 
-  // while(!blackCount) {
-  //   blackCount = Hubris.movetoBlackLine();
-  // }
-  // Hubris.stop();
-
-  // Hubris.testIRSensors();
-  // Hubris.followLine();
-
-  Hubris.moveForward();
-  Hubris.getLeftWheelRotationCount();
-  Hubris.getRightWheelRotationCount();
-
+  switch(Hubris.getState()){
+    case 0:   // calibration
+      break;
+    case 1:   // go forward
+      break;
+    case 2:   // turn left
+      break;
+    case 3:   // follow line
+      break;
+    case 4:   // slow down
+      break;
+    case 5:   // move back
+      break;
+    case 6:   // turn left
+      break;
+    case 7:   // move forward
+      break;  
+    case 8:   // turn left
+      break;
+    case 9:   // move forward
+      break;
+    case 10:  // stop
+      break;
+  }
 
   Serial.print("Runtime:");
   Serial.print(millis() - timestamp);

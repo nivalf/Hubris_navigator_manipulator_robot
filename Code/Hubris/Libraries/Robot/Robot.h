@@ -27,6 +27,8 @@ public:
     Motor MotorRight;
     void getLeftWheelRotationCount();
     void getRightWheelRotationCount();
+    int getState();
+    void setState(int state);
 
 private:
     IR IRLeft;
@@ -36,6 +38,7 @@ private:
     int turnSpeed;
     float steeringFactor;
     int steeringCooloffTime;
+    int state;
 };
 
 #endif

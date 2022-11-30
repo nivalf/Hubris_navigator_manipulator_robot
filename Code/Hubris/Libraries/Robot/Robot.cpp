@@ -37,6 +37,7 @@
  */
 Robot::Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int MotorLeftPin1, int MotorLeftPin2, int MotorLeftStandbyPin, int MotorLeftPwmPin, int MotorLeftEncoderPin1, int MotorLeftEncoderPin2, int MotorRightPin1, int MotorRightPin2, int MotorRightStandbyPin, int MotorRightPwmPin, int MotorRightEncoderPin1, int MotorRightEncoderPin2) : 
 // private variables
+state(0),
 speed(speed), 
 turnSpeed(turnSpeed), 
 steeringFactor(steeringFactor), 
@@ -128,6 +129,15 @@ void Robot::testMotors()
     MotorLeft.brake();
     MotorRight.brake();
     delay(1000);
+}
+
+
+void Robot::setState(int state) {
+    this->state = state;
+}
+
+int Robot::getState() {
+    return this->state;
 }
 
 // Move the robot forward
