@@ -8,44 +8,43 @@
 #define echoPin 6
 
 // pins for left motor
-#define MotorLeftPin1 7
-#define MotorLeftPin2 8
-#define MotorLeftStandbyPin 9
-#define MotorLeftPWMPin 10
-#define MotorLeftEncoderChannelAPin 2
-#define MotorLeftEncoderChannelBPin 4
+#define motorLeftPin1 7
+#define motorLeftPin2 8
+#define motorLeftStandbyPin 9
+#define motorLeftPWMPin 10
+#define motorLeftEncoderChannel_A_Pin 2
+#define motorLeftEncoderChannel_B_Pin 4
 // pins for right motor
-#define MotorRightPin1 12
-#define MotorRightPin2 13
-#define MotorRightStandbyPin 9
-#define MotorRightPWMPin 11
-#define MotorRightEncoderChannelAPin 3
-#define MotorRightEncoderChannelBPin 5
+#define motorRightPin1 12
+#define motorRightPin2 13
+#define motorRightStandbyPin 9
+#define motorRightPWMPin 11
+#define motorRightEncoderChannel_A_Pin 3
+#define motorRightEncoderChannel_B_Pin 5
 
 #define speed 50
 #define turnSpeed 250
 #define steeringFactor 0.2  // percentage
 #define steeringCooloffTime 20
 
-Robot Hubris(speed, turnSpeed, steeringFactor, steeringCooloffTime, IRLeftAPin, IRRightAPin, trigPin, echoPin, MotorLeftPin1, MotorLeftPin2, MotorLeftStandbyPin, MotorLeftPWMPin, MotorLeftEncoderChannelAPin, MotorLeftEncoderChannelBPin, MotorRightPin2, MotorRightPin1, MotorRightStandbyPin, MotorRightPWMPin, MotorRightEncoderChannelAPin, MotorRightEncoderChannelBPin);
+Robot Hubris(speed, turnSpeed, steeringFactor, steeringCooloffTime, IRLeftAPin, IRRightAPin, trigPin, echoPin, motorLeftPin1, motorLeftPin2, motorLeftStandbyPin, motorLeftPWMPin, motorLeftEncoderChannel_A_Pin, motorLeftEncoderChannel_B_Pin, motorRightPin2, motorRightPin1, motorRightStandbyPin, motorRightPWMPin, motorRightEncoderChannel_A_Pin, motorRightEncoderChannel_B_Pin);
 
 long timestamp;
 
 void motorLeftISR() {
-  Hubris.MotorLeft.countEncoderChannelA();
+  Hubris.MotorLeft.countEncoderChannel_A();
 }
 
 void motorRightISR() {
-  Hubris.MotorRight.countEncoderChannelA();
+  Hubris.MotorRight.countEncoderChannel_A();
 }
 
 void setup(void) {
   Serial.begin(9600);  // We'll send debugging information via the Serial monitor
 
-
   // Attaching interrupt to pins for encoder
-  attachInterrupt(digitalPinToInterrupt(MotorLeftEncoderChannelAPin), motorLeftISR, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(MotorRightEncoderChannelAPin), motorRightISR, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(motorLeftEncoderChannel_A_Pin), motorLeftISR, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(motorRightEncoderChannel_A_Pin), motorRightISR, CHANGE);
 
   Hubris.init();
 }

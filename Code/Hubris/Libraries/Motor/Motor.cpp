@@ -2,15 +2,15 @@
 #include "Arduino.h"
 
 // Constructor
-Motor::Motor(int driverInputPin1, int driverInputPin2, int pwmPin, int standbyPin, int encoderPinChannelA, int encoderPinChannelB) : // private variables initialization list
+Motor::Motor(int driverInputPin1, int driverInputPin2, int pwmPin, int standbyPin, int encoderPinChannel_A, int encoderPinChannel_B) : // private variables initialization list
                                                                                                                        driverInputPin1(driverInputPin1),
                                                                                                                        driverInputPin2(driverInputPin2),
                                                                                                                        standbyPin(standbyPin),
                                                                                                                        pwmPin(pwmPin),
-                                                                                                                       encoderPinChannelA(encoderPinChannelA),
-                                                                                                                       encoderPinChannelB(encoderPinChannelB),
-                                                                                                                       encoderPinChannelAPrevState(LOW),
-                                                                                                                       encoderPinChannelBPrevState(LOW),
+                                                                                                                       encoderPinChannel_A(encoderPinChannel_A),
+                                                                                                                       encoderPinChannel_B(encoderPinChannel_B),
+                                                                                                                       encoderPinChannel_A_prevState(LOW),
+                                                                                                                       encoderPinChannel_B_prevState(LOW),
                                                                                                                        encoderCount(0)
 {
     pinMode(driverInputPin1, OUTPUT);
@@ -59,13 +59,13 @@ void Motor::stop()
 }
 
 // Count the number of pulses from the encoder of channel A
-void Motor::countEncoderChannelA()
+void Motor::countEncoderChannel_A()
 {
-    int encoderPinChannelAState = digitalRead(encoderPinChannelA);
-    int encoderPinChannelBState = digitalRead(encoderPinChannelB);
+    int encoderPinChannel_A_state = digitalRead(encoderPinChannel_A);
+    int encoderPinChannel_B_state = digitalRead(encoderPinChannel_B);
 
-    int isRisingEdge = encoderPinChannelAState == HIGH && encoderPinChannelAPrevState == LOW;
-    int isFallingEdge = encoderPinChannelAState == LOW && encoderPinChannelAPrevState == HIGH;
+    int isRisingEdge = encoderPinChannel_A_state == HIGH && encoderPinChannel_A_prevState == LOW;
+    int isFallingEdge = encoderPinChannel_A_state == LOW && encoderPinChannel_A_prevState == HIGH;
 
     /*
         Channel A   |   Channel B   |   Direction   |   Count
@@ -76,33 +76,33 @@ void Motor::countEncoderChannelA()
             1->0    |       1       |       CW      |   +1
     */
     if (isRisingEdge)
-        encoderPinChannelBState == LOW ? encoderCount++ : encoderCount--;
+        encoderPinChannel_B_state == LOW ? encoderCount++ : encoderCount--;
     else if (isFallingEdge)
-        encoderPinChannelBState == HIGH ? encoderCount++ : encoderCount--;
+        encoderPinChannel_B_state == HIGH ? encoderCount++ : encoderCount--;
     else
     { // Not supposed to enter here
         Serial.println("Error in counting encoder channel A");
-        Serial.print("EncoderPinChannelAState: ");
-        Serial.print(encoderPinChannelAState);
-        Serial.print(", EncoderPin2State: ");
-        Serial.print(encoderPinChannelBState);
-        Serial.print(", EncoderPin1PrevState: ");
-        Serial.print(encoderPinChannelAPrevState);
-        Serial.print(", EncoderPin2PrevState: ");
-        Serial.println(encoderPinChannelBPrevState);
+        Serial.print("EncoderPinChannel_A_state: ");
+        Serial.print(encoderPinChannel_A_state);
+        Serial.print(", encoderPinChannel_B_state: ");
+        Serial.print(encoderPinChannel_B_state);
+        Serial.print(", encoderPinChannel_A_prevState: ");
+        Serial.print(encoderPinChannel_A_prevState);
+        Serial.print(", encoderPinChannel_B_prevState: ");
+        Serial.println(encoderPinChannel_B_prevState);
     }
 
-    encoderPinChannelAPrevState = encoderPinChannelAState;
+    encoderPinChannel_A_prevState = encoderPinChannel_A_state;
 }
 
 // Count the number of pulses from the encoder of channel B
-void Motor::countEncoderChannelB()
+void Motor::countEncoderChannel_B()
 {
-    int encoderPinChannelAState = digitalRead(encoderPinChannelA);
-    int encoderPinChannelBState = digitalRead(encoderPinChannelB);
+    int encoderPinChannel_A_state = digitalRead(encoderPinChannel_A);
+    int encoderPinChannel_B_state = digitalRead(encoderPinChannel_B);
 
-    int isRisingEdge = encoderPinChannelBState == HIGH && encoderPinChannelBPrevState == LOW;
-    int isFallingEdge = encoderPinChannelBState == LOW && encoderPinChannelBPrevState == HIGH;
+    int isRisingEdge = encoderPinChannel_B_state == HIGH && encoderPinChannel_B_prevState == LOW;
+    int isFallingEdge = encoderPinChannel_B_state == LOW && encoderPinChannel_B_prevState == HIGH;
 
     /*
         Channel A   |   Channel B   |   Direction   |   Count
@@ -113,23 +113,23 @@ void Motor::countEncoderChannelB()
             0       |       1->0    |       CW      |   +1
     */
     if (isRisingEdge)
-        encoderPinChannelAState == HIGH ? encoderCount++ : encoderCount--;
+        encoderPinChannel_A_state == HIGH ? encoderCount++ : encoderCount--;
     else if (isFallingEdge)
-        encoderPinChannelAState == LOW ? encoderCount++ : encoderCount--;
+        encoderPinChannel_A_state == LOW ? encoderCount++ : encoderCount--;
     else
     { // Not supposed to enter here
         Serial.println("Error in counting encoder channel B");
-        Serial.print("EncoderPinChannelAState: ");
-        Serial.print(encoderPinChannelAState);
-        Serial.print(", EncoderPin2State: ");
-        Serial.print(encoderPinChannelBState);
-        Serial.print(", EncoderPin1PrevState: ");
-        Serial.print(encoderPinChannelAPrevState);
-        Serial.print(", EncoderPin2PrevState: ");
-        Serial.println(encoderPinChannelBPrevState);
+        Serial.print("EncoderPinChannel_A_state: ");
+        Serial.print(encoderPinChannel_A_state);
+        Serial.print(", encoderPinChannel_B_state: ");
+        Serial.print(encoderPinChannel_B_state);
+        Serial.print(", encoderPinChannel_A_prevState: ");
+        Serial.print(encoderPinChannel_A_prevState);
+        Serial.print(", encoderPinChannel_B_prevState: ");
+        Serial.println(encoderPinChannel_B_prevState);
     }
 
-    encoderPinChannelAPrevState = encoderPinChannelAState;
+    encoderPinChannel_A_prevState = encoderPinChannel_A_state;
 }
 
 float Motor::getRotationCount() {

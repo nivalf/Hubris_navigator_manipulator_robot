@@ -11,19 +11,19 @@
         IRLeftpin
         IRRightpin
         -
-        MotorLeftPin1
-        MotorLeftPin2
-        MotorLeftPWMPin
-        MotorLeftStandbyPin
-        MotorLeftEncoderChannelAPin
-        MotorLeftEncoderChannelBPin
+        motorLeftPin1
+        motorLeftPin2
+        motorLeftPWMPin
+        motorLeftStandbyPin
+        motorLeftEncoderChannel_A_Pin
+        motorLeftEncoderChannel_B_Pin
         -
-        MotorRightPin1
-        MotorRightPin2
-        MotorRightPWMPin
-        MotorRightStandbyPin
-        MotorRightEncoderChannelAPin
-        MotorRightEncoderChannelBPin
+        motorRightPin1
+        motorRightPin2
+        motorRightPWMPin
+        motorRightStandbyPin
+        motorRightEncoderChannel_A_Pin
+        motorRightEncoderChannel_B_Pin
         -
         UltrasonicEchoPin
         UltrasonicTrigPin
@@ -35,7 +35,7 @@
         MotorRight
         UltrasonicFront
  */
-Robot::Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int MotorLeftPin1, int MotorLeftPin2, int MotorLeftStandbyPin, int MotorLeftPwmPin, int MotorLeftEncoderChannelAPin, int MotorLeftEncoderChannelBPin, int MotorRightPin1, int MotorRightPin2, int MotorRightStandbyPin, int MotorRightPwmPin, int MotorRightEncoderChannelAPin, int MotorRightEncoderChannelBPin) : 
+Robot::Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int motorLeftPin1, int motorLeftPin2, int motorLeftStandbyPin, int MotorLeftPwmPin, int motorLeftEncoderChannel_A_Pin, int motorLeftEncoderChannel_B_Pin, int motorRightPin1, int motorRightPin2, int motorRightStandbyPin, int MotorRightPwmPin, int motorRightEncoderChannel_A_Pin, int motorRightEncoderChannel_B_Pin) : 
 // private variables
 state(0),
 speed(speed), 
@@ -46,8 +46,8 @@ steeringCooloffTime(steeringCooloffTime),
 IRLeft(IRLeftPin), 
 IRRight(IRRightPin), 
 UltrasonicFront(UltrasonicEchoPin, UltrasonicTrigPin), 
-MotorLeft(MotorLeftPin1, MotorLeftPin2, MotorLeftPwmPin, MotorLeftStandbyPin, MotorLeftEncoderChannelAPin, MotorLeftEncoderChannelBPin), 
-MotorRight(MotorRightPin1, MotorRightPin2, MotorRightPwmPin, MotorRightStandbyPin, MotorRightEncoderChannelAPin, MotorRightEncoderChannelBPin)
+MotorLeft(motorLeftPin1, motorLeftPin2, MotorLeftPwmPin, motorLeftStandbyPin, motorLeftEncoderChannel_A_Pin, motorLeftEncoderChannel_B_Pin), 
+MotorRight(motorRightPin1, motorRightPin2, MotorRightPwmPin, motorRightStandbyPin, motorRightEncoderChannel_A_Pin, motorRightEncoderChannel_B_Pin)
 {
 }
 
@@ -223,7 +223,7 @@ int Robot::movetoBlackLine()
 
 // ***************** WHEELS ***************** //
 
-void Robot::countLeftEncoderChannel
+// void Robot::countLeftEncoderChannel
 
 void Robot::getLeftWheelRotationCount()
 {
