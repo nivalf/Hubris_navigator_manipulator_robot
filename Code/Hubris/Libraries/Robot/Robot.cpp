@@ -55,6 +55,8 @@ void Robot::init()
 {
     IRLeft.init();
     IRRight.init();
+    MotorLeft.init();
+    MotorRight.init();
 }
 
 
@@ -207,4 +209,18 @@ int Robot::movetoBlackLine()
         moveForward();
         return 0;
     }
+}
+
+void Robot::getLeftWheelRotationCount()
+{
+    Serial.print("Left wheel rotation: ");
+    Serial.println(MotorLeft.getRotationCount());
+}
+
+
+
+void Robot::getRightWheelRotationCount()
+{
+    Serial.print("Right wheel rotation: ");
+    Serial.println(MotorLeft.getRotationCount());
 }

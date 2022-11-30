@@ -23,12 +23,14 @@ public:
     void stop();
     void followLine();   
     int movetoBlackLine();
+    Motor MotorLeft;
+    Motor MotorRight;
+    void getLeftWheelRotationCount();
+    void getRightWheelRotationCount();
 
 private:
     IR IRLeft;
     IR IRRight;
-    Motor MotorLeft;
-    Motor MotorRight;
     Ultrasonic UltrasonicFront;
     int speed;
     int turnSpeed;
