@@ -223,8 +223,33 @@ int Robot::movetoBlackLine()
 
 // ***************** WHEELS ***************** //
 
-// void Robot::countLeftEncoderChannel
+/* Encoder methods of each wheels are defines as below 
+to be used in the interrupt functions in the setup() on the 
+main .ino file*/
 
+// Left wheel
+void Robot::countLeftEncoderChannel_A()
+{
+    MotorLeft.countEncoderChannel_A();
+}
+
+void Robot::countLeftEncoderChannel_B()
+{
+    MotorLeft.countEncoderChannel_B();
+}
+
+// Right wheel
+void Robot::countRightEncoderChannel_A()
+{
+    MotorRight.countEncoderChannel_A();
+}
+
+void Robot::countRightEncoderChannel_B()
+{
+    MotorRight.countEncoderChannel_B();
+}
+
+// Rotation count of the wheels
 void Robot::getLeftWheelRotationCount()
 {
     Serial.print("Left wheel rotation: ");

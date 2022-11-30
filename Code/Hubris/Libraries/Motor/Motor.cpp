@@ -17,6 +17,8 @@ Motor::Motor(int driverInputPin1, int driverInputPin2, int pwmPin, int standbyPi
     pinMode(driverInputPin2, OUTPUT);
     pinMode(standbyPin, OUTPUT);
     pinMode(pwmPin, OUTPUT);
+    pinMode(encoderPinChannel_A, INPUT);
+    pinMode(encoderPinChannel_B, INPUT);
 }
 
 void Motor::init() {

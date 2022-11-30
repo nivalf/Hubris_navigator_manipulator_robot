@@ -31,8 +31,10 @@ public:
     void followLine();   
     int movetoBlackLine();
     // motor & wheels
-    Motor MotorLeft;
-    Motor MotorRight;
+    void countLeftEncoderChannel_A();
+    void countLeftEncoderChannel_B();
+    void countRightEncoderChannel_A();
+    void countRightEncoderChannel_B();
     void getLeftWheelRotationCount();
     void getRightWheelRotationCount();
 
@@ -40,6 +42,8 @@ private:
     IR IRLeft;
     IR IRRight;
     Ultrasonic UltrasonicFront;
+    Motor MotorLeft;
+    Motor MotorRight;
     int speed;
     int turnSpeed;
     float steeringFactor;

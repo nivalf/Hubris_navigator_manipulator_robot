@@ -31,12 +31,13 @@ Robot Hubris(speed, turnSpeed, steeringFactor, steeringCooloffTime, IRLeftAPin, 
 
 long timestamp;
 
+// ISRs : Interrupt Service Routines
 void motorLeftISR() {
-  Hubris.MotorLeft.countEncoderChannel_A();
+  Hubris.countLeftEncoderChannel_A();
 }
 
 void motorRightISR() {
-  Hubris.MotorRight.countEncoderChannel_A();
+  Hubris.countRightEncoderChannel_A();
 }
 
 void setup(void) {
@@ -52,26 +53,26 @@ void setup(void) {
 void loop(void) {
   timestamp = millis();
 
-  switch(Hubris.getState()){
-    case 0:   // calibration
+  switch (Hubris.getState()) {
+    case 0:  // calibration
       break;
-    case 1:   // go forward
+    case 1:  // go forward
       break;
-    case 2:   // turn left
+    case 2:  // turn left
       break;
-    case 3:   // follow line
+    case 3:  // follow line
       break;
-    case 4:   // slow down
+    case 4:  // slow down
       break;
-    case 5:   // move back
+    case 5:  // move back
       break;
-    case 6:   // turn left
+    case 6:  // turn left
       break;
-    case 7:   // move forward
-      break;  
-    case 8:   // turn left
+    case 7:  // move forward
       break;
-    case 9:   // move forward
+    case 8:  // turn left
+      break;
+    case 9:  // move forward
       break;
     case 10:  // stop
       break;
@@ -80,6 +81,4 @@ void loop(void) {
   Serial.print("Runtime:");
   Serial.print(millis() - timestamp);
   Serial.println(' ');
-
-  delay(100);
 }
