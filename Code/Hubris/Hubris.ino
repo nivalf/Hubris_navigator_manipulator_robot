@@ -3,6 +3,8 @@
 // IR pins
 #define IRLeftAPin A5
 #define IRRightAPin A4
+// BatteryVoltage
+#define batteryVoltagePin A0  
 // use same pin for trig & echo
 #define trigPin 6
 #define echoPin 6
@@ -27,7 +29,7 @@
 #define steeringFactor 0.2  // percentage
 #define steeringCooloffTime 20
 
-Robot Hubris(speed, turnSpeed, steeringFactor, steeringCooloffTime, IRLeftAPin, IRRightAPin, trigPin, echoPin, motorLeftPin1, motorLeftPin2, motorLeftStandbyPin, motorLeftPWMPin, motorLeftEncoderChannel_A_Pin, motorLeftEncoderChannel_B_Pin, motorRightPin2, motorRightPin1, motorRightStandbyPin, motorRightPWMPin, motorRightEncoderChannel_A_Pin, motorRightEncoderChannel_B_Pin);
+Robot Hubris(speed, turnSpeed, steeringFactor, steeringCooloffTime, IRLeftAPin, IRRightAPin, trigPin, echoPin, motorLeftPin1, motorLeftPin2, motorLeftStandbyPin, motorLeftPWMPin, motorLeftEncoderChannel_A_Pin, motorLeftEncoderChannel_B_Pin, motorRightPin2, motorRightPin1, motorRightStandbyPin, motorRightPWMPin, motorRightEncoderChannel_A_Pin, motorRightEncoderChannel_B_Pin, batteryVoltagePin);
 
 long timestamp;
 
@@ -44,8 +46,8 @@ void setup(void) {
   Serial.begin(9600);  // We'll send debugging information via the Serial monitor
 
   // Attaching interrupt to pins for encoder
-  attachInterrupt(digitalPinToInterrupt(motorLeftEncoderChannel_A_Pin), motorLeftISR, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(motorRightEncoderChannel_A_Pin), motorRightISR, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(motorLeftEncoderChannel_A_Pin), motorLeftISR, RISING);
+  attachInterrupt(digitalPinToInterrupt(motorRightEncoderChannel_A_Pin), motorRightISR, RISING);
 
   Hubris.init();
 }
@@ -78,7 +80,7 @@ void loop(void) {
       break;
   }
 
-  Serial.print("Runtime:");
-  Serial.print(millis() - timestamp);
-  Serial.println(' ');
+  // Serial.print("Runtime:");
+  // Serial.print(millis() - timestamp);
+  // Serial.println(' ');
 }

@@ -7,11 +7,12 @@
 #include "IR.h"
 #include "Motor.h"
 #include "Ultrasonic.h"
+#include "BatteryVoltage.h"
 
 class Robot
 {
 public:
-    Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int motorLeftPin1, int motorLeftPin2, int motorLeftStandbyPin, int MotorLeftPwmPin, int motorLeftEncoderChannel_A_Pin, int motorLeftEncoderChannel_B_Pin, int motorRightPin1, int motorRightPin2, int motorRightStandbyPin, int MotorRightPwmPin, int motorRightEncoderChannel_A_Pin, int motorRightEncoderChannel_B_Pin);
+    Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int motorLeftPin1, int motorLeftPin2, int motorLeftStandbyPin, int motorLeftPwmPin, int motorLeftEncoderChannel_A_Pin, int motorLeftEncoderChannel_B_Pin, int motorRightPin1, int motorRightPin2, int motorRightStandbyPin, int motorRightPwmPin, int motorRightEncoderChannel_A_Pin, int motorRightEncoderChannel_B_Pin, int batteryVoltagePin);
     void init();
     // test
     void testIRSensors();
@@ -32,9 +33,7 @@ public:
     int movetoBlackLine();
     // motor & wheels
     void countLeftEncoderChannel_A();
-    void countLeftEncoderChannel_B();
     void countRightEncoderChannel_A();
-    void countRightEncoderChannel_B();
     void getLeftWheelRotationCount();
     void getRightWheelRotationCount();
 
@@ -44,6 +43,7 @@ private:
     Ultrasonic UltrasonicFront;
     Motor MotorLeft;
     Motor MotorRight;
+    BatteryVoltage RobotBatteryVoltage; 
     int speed;
     int turnSpeed;
     float steeringFactor;

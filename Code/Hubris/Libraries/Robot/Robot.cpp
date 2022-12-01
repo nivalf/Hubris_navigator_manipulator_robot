@@ -27,6 +27,8 @@
         -
         UltrasonicEchoPin
         UltrasonicTrigPin
+        -
+        batteryVoltagePin
 
  *  instantiates:
         IRLeft
@@ -35,7 +37,7 @@
         MotorRight
         UltrasonicFront
  */
-Robot::Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int motorLeftPin1, int motorLeftPin2, int motorLeftStandbyPin, int MotorLeftPwmPin, int motorLeftEncoderChannel_A_Pin, int motorLeftEncoderChannel_B_Pin, int motorRightPin1, int motorRightPin2, int motorRightStandbyPin, int MotorRightPwmPin, int motorRightEncoderChannel_A_Pin, int motorRightEncoderChannel_B_Pin) : 
+Robot::Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int motorLeftPin1, int motorLeftPin2, int motorLeftStandbyPin, int motorLeftPwmPin, int motorLeftEncoderChannel_A_Pin, int motorLeftEncoderChannel_B_Pin, int motorRightPin1, int motorRightPin2, int motorRightStandbyPin, int motorRightPwmPin, int motorRightEncoderChannel_A_Pin, int motorRightEncoderChannel_B_Pin, int batteryVoltagePin) : 
 // private variables
 state(0),
 speed(speed), 
@@ -46,14 +48,16 @@ steeringCooloffTime(steeringCooloffTime),
 IRLeft(IRLeftPin), 
 IRRight(IRRightPin), 
 UltrasonicFront(UltrasonicEchoPin, UltrasonicTrigPin), 
-MotorLeft(motorLeftPin1, motorLeftPin2, MotorLeftPwmPin, motorLeftStandbyPin, motorLeftEncoderChannel_A_Pin, motorLeftEncoderChannel_B_Pin), 
-MotorRight(motorRightPin1, motorRightPin2, MotorRightPwmPin, motorRightStandbyPin, motorRightEncoderChannel_A_Pin, motorRightEncoderChannel_B_Pin)
+MotorLeft(motorLeftPin1, motorLeftPin2, motorLeftPwmPin, motorLeftStandbyPin, motorLeftEncoderChannel_A_Pin, motorLeftEncoderChannel_B_Pin), 
+MotorRight(motorRightPin1, motorRightPin2, motorRightPwmPin, motorRightStandbyPin, motorRightEncoderChannel_A_Pin, motorRightEncoderChannel_B_Pin),
+RobotBatteryVoltage(batteryVoltagePin)
 {
 }
 
 // Initialize the robot
 void Robot::init()
 {
+    RobotBatteryVoltage.checkVoltage();
     IRLeft.init();
     IRRight.init();
     MotorLeft.init();
@@ -233,20 +237,10 @@ void Robot::countLeftEncoderChannel_A()
     MotorLeft.countEncoderChannel_A();
 }
 
-void Robot::countLeftEncoderChannel_B()
-{
-    MotorLeft.countEncoderChannel_B();
-}
-
 // Right wheel
 void Robot::countRightEncoderChannel_A()
 {
     MotorRight.countEncoderChannel_A();
-}
-
-void Robot::countRightEncoderChannel_B()
-{
-    MotorRight.countEncoderChannel_B();
 }
 
 // Rotation count of the wheels

@@ -16,7 +16,6 @@ class Motor
     void brake();
     void freeWheel();
     void countEncoderChannel_A();
-    void countEncoderChannel_B();
     float getRotationCount();
   private:
     int driverInputPin1;
@@ -25,8 +24,8 @@ class Motor
     int pwmPin;
     int encoderPinChannel_A;
     int encoderPinChannel_B;
-    int encoderPinChannel_A_prevState;
-    int encoderPinChannel_B_prevState;
+    int channel_A_prevState;
+    int channel_B_prevState;
     int encoderCount;
 };
 
