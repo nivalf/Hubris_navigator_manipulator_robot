@@ -37,25 +37,26 @@
         MotorRight
         UltrasonicFront
  */
-Robot::Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int motorLeftPin1, int motorLeftPin2, int motorLeftStandbyPin, int motorLeftPwmPin, int motorLeftEncoderChannel_A_Pin, int motorLeftEncoderChannel_B_Pin, int motorRightPin1, int motorRightPin2, int motorRightStandbyPin, int motorRightPwmPin, int motorRightEncoderChannel_A_Pin, int motorRightEncoderChannel_B_Pin, int batteryVoltagePin) : 
-// private variables
-state(0),
-speed(speed), 
-turnSpeed(turnSpeed), 
-steeringFactor(steeringFactor), 
-steeringCooloffTime(steeringCooloffTime), 
-// member classes
-IRLeft(IRLeftPin), 
-IRRight(IRRightPin), 
-UltrasonicFront(UltrasonicEchoPin, UltrasonicTrigPin), 
-MotorLeft(motorLeftPin1, motorLeftPin2, motorLeftPwmPin, motorLeftStandbyPin, motorLeftEncoderChannel_A_Pin, motorLeftEncoderChannel_B_Pin), 
-MotorRight(motorRightPin1, motorRightPin2, motorRightPwmPin, motorRightStandbyPin, motorRightEncoderChannel_A_Pin, motorRightEncoderChannel_B_Pin),
-RobotBatteryVoltage(batteryVoltagePin)
+Robot::Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int motorLeftPin1, int motorLeftPin2, int motorLeftStandbyPin, int motorLeftPwmPin, int motorLeftEncoderChannel_A_Pin, int motorLeftEncoderChannel_B_Pin, int motorRightPin1, int motorRightPin2, int motorRightStandbyPin, int motorRightPwmPin, int motorRightEncoderChannel_A_Pin, int motorRightEncoderChannel_B_Pin, int batteryVoltagePin) : // private variables
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      state(0),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      speed(speed),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      defaultSpeed(speed),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      turnSpeed(turnSpeed),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      steeringFactor(steeringFactor),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      steeringCooloffTime(steeringCooloffTime),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      // member classes
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      IRLeft(IRLeftPin),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      IRRight(IRRightPin),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      UltrasonicFront(UltrasonicEchoPin, UltrasonicTrigPin),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      MotorLeft(motorLeftPin1, motorLeftPin2, motorLeftPwmPin, motorLeftStandbyPin, motorLeftEncoderChannel_A_Pin, motorLeftEncoderChannel_B_Pin),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      MotorRight(motorRightPin1, motorRightPin2, motorRightPwmPin, motorRightStandbyPin, motorRightEncoderChannel_A_Pin, motorRightEncoderChannel_B_Pin),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      RobotBatteryVoltage(batteryVoltagePin)
 {
 }
 
 // 1.146067
 const float CORRECTION_FACTOR = 1.13;
+const float WHEEL_CIRCUMFERENCE = 21.7; // in cm
 
 // Initialize the robot
 void Robot::init()
@@ -69,11 +70,13 @@ void Robot::init()
 
 // ***************** STATE ***************** //
 
-void Robot::setState(int state) {
+void Robot::setState(short int state)
+{
     this->state = state;
 }
 
-int Robot::getState() {
+int Robot::getState()
+{
     return this->state;
 }
 
@@ -96,7 +99,8 @@ void Robot::testIRSensors()
 }
 
 // Test ultrasonic sensor & print the values
-void Robot::testUltraSonicSensor(){
+void Robot::testUltraSonicSensor()
+{
     Serial.print("Dist:");
     Serial.print(UltrasonicFront.getDistance());
     Serial.print(" ");
@@ -143,6 +147,19 @@ void Robot::testMotors()
     delay(1000);
 }
 
+// ***************** SPEED ***************** //
+// Set the speed of the robot
+void Robot::setSpeed(short int speed)
+{
+    this->speed = speed;
+}
+
+// reset the speed to the default speed
+void Robot::resetSpeed()
+{
+    this->speed = this->defaultSpeed;
+}
+
 // ***************** BASIC MOVEMENT ***************** //
 
 // Move the robot forward
@@ -152,7 +169,6 @@ void Robot::moveForward()
     MotorRight.forward(speed);
 }
 
-
 // Move the robot backward
 void Robot::moveBackward()
 {
@@ -160,12 +176,14 @@ void Robot::moveBackward()
     MotorRight.reverse(speed);
 }
 
+// Turn the robot left 90 degrees
 void Robot::turnLeft()
 {
     MotorLeft.reverse((int)(CORRECTION_FACTOR * turnSpeed));
     MotorRight.forward(turnSpeed);
 
-    while(getLeftWheelRotationCount() < 1.0) {
+    while (getLeftWheelRotationCount() < 0.651152)
+    {
         // getWheelStats();
         // loop here
     }
@@ -175,7 +193,7 @@ void Robot::turnLeft()
 // Steer the robot left
 void Robot::steerLeft()
 {
-    int reducedSpeed = speed * (1-steeringFactor);
+    int reducedSpeed = speed * (1 - steeringFactor);
 
     MotorLeft.forward(reducedSpeed);
     MotorRight.forward(speed);
@@ -184,7 +202,7 @@ void Robot::steerLeft()
 // Steer the robot right
 void Robot::steerRight()
 {
-    int reducedSpeed = speed * (1-steeringFactor);
+    int reducedSpeed = speed * (1 - steeringFactor);
 
     MotorLeft.forward(speed);
     MotorRight.forward(reducedSpeed);
@@ -202,48 +220,53 @@ void Robot::stop()
 // Line following
 void Robot::followLine()
 {
-    int leftIR = IRLeft.digitalRead();      // 0 for black, 1 for white
-    int rightIR = IRRight.digitalRead();    // 0 for black, 1 for white
+    int leftIR = IRLeft.digitalRead();   // 0 for black, 1 for white
+    int rightIR = IRRight.digitalRead(); // 0 for black, 1 for white
 
     if (leftIR < rightIR)
     {
         steerLeft();
         delay(steeringCooloffTime);
     }
-    
+
     if (rightIR < leftIR)
     {
         steerRight();
         delay(steeringCooloffTime);
     }
-    
+
     if (rightIR == leftIR)
     {
         moveForward();
     }
 }
 
-// Move to the blackLine
-int Robot::movetoBlackLine()
+// Ultrasonic value < 35
+// Wheel rotation count < 60/WHEEL_CIRCUMFERENCE
+bool Robot::blackLineInProximity()
+{
+    return (UltrasonicFront.getDistance_RunningAvg() < 35) && (getLeftWheelRotationCount() < 60 / WHEEL_CIRCUMFERENCE);
+}
+
+// Reached the black line
+bool Robot::reachedBlackLine()
 {
     int leftIR = IRLeft.digitalRead();
     int rightIR = IRRight.digitalRead();
 
-    if(leftIR == 0 || rightIR == 0)
-    {
-        return 1;
-    }
-    else
-    {
-        moveForward();
-        return 0;
-    }
+    return (leftIR == 0 || rightIR == 0) ? 1 : 0;
+}
+
+// DEV NOTE: check with M
+bool Robot::buttonPressed()
+{
+    // return (digitalRead(buttonPin) == 0) ? 1 : 0;
 }
 
 // ***************** WHEELS ***************** //
 
-/* Encoder methods of each wheels are defines as below 
-to be used in the interrupt functions in the setup() on the 
+/* Encoder methods of each wheels are defines as below
+to be used in the interrupt functions in the setup() on the
 main .ino file*/
 
 // Left wheel
@@ -271,39 +294,46 @@ void Robot::getWheelStats()
     Serial.println(getLeftWheelAngle());
 }
 
-float Robot::getLeftWheelRotationCount() {
+float Robot::getLeftWheelRotationCount()
+{
     return MotorLeft.getWheelRotationCount();
 }
 
-float Robot::getLeftWheelAngle() {
+float Robot::getLeftWheelAngle()
+{
     return MotorLeft.getWheelAngle();
 }
 
-/*  
-    Right wheel rotation is multiplied by -1 to 
-    make the visualise the rotation of both wheels 
+/*
+    Right wheel rotation is multiplied by -1 to
+    make the visualise the rotation of both wheels
     positive when moving forward
 */
-float Robot::getRightWheelRotationCount() {
+float Robot::getRightWheelRotationCount()
+{
     return (-1.0) * MotorRight.getWheelRotationCount();
 }
 
-float Robot::getRightWheelAngle() {
+float Robot::getRightWheelAngle()
+{
     return (-1.0) * MotorRight.getWheelAngle();
 }
 
 // Reset the encoder values of each motor
-void Robot::resetWheelEncoders() {
+void Robot::resetWheelEncoders()
+{
     MotorLeft.resetWheelEncoder();
     MotorRight.resetWheelEncoder();
 }
 
 // ***************** TRIALS ***************** //
 
-void Robot::moveOneWheelLength() {
+void Robot::moveOneWheelLength()
+{
     resetWheelEncoders();
     moveForward();
-    while(getLeftWheelRotationCount() < 1.0) {
+    while (getLeftWheelRotationCount() < 1.0)
+    {
         getWheelStats();
         // loop here
     }

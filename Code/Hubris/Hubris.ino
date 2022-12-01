@@ -4,7 +4,7 @@
 #define IRLeftAPin A5
 #define IRRightAPin A4
 // BatteryVoltage
-#define batteryVoltagePin A0  
+#define batteryVoltagePin A0
 // use same pin for trig & echo
 #define trigPin 6
 #define echoPin 6
@@ -24,8 +24,11 @@
 #define motorRightEncoderChannel_A_Pin 3
 #define motorRightEncoderChannel_B_Pin 5
 
-#define speed 50
+#define speed 150
+#define reducedSpeed 50
+#define lineFollowSpeed 50
 #define turnSpeed 30
+
 #define steeringFactor 0.2  // percentage
 #define steeringCooloffTime 20
 
@@ -61,30 +64,40 @@ void loop(void) {
 
   // Hubris.resetWheelEncoders();
 
-  // switch (Hubris.getState()) {
-  //   case 0:  // calibration
-  //     break;
-  //   case 1:  // go forward
-  //     break;
-  //   case 2:  // turn left
-  //     break;
-  //   case 3:  // follow line
-  //     break;
-  //   case 4:  // slow down
-  //     break;
-  //   case 5:  // move back
-  //     break;
-  //   case 6:  // turn left
-  //     break;
-  //   case 7:  // move forward
-  //     break;
-  //   case 8:  // turn left
-  //     break;
-  //   case 9:  // move forward
-  //     break;
-  //   case 10:  // stop
-  //     break;
-  // }
+  switch (Hubris.getState()) {
+      //   case 0:  // calibration
+      //     break;
+    case 1:  // go forward
+      Hubris.resetSpeed();
+      Hubris.moveForward();
+      Hubris.setState(2);
+      break;
+    case 2:  // reduce speed
+      if (Hubris.blackLineInProximity()) {
+        Hubris.setSpeed(reducedSpeed);
+        Hubris.setState(3);
+      }
+      break;
+    case 3:  // turn left
+      if (Hubris.reachedBlackLine()) {
+        Hubris.turnLeft();
+        Hubris.resetWheelEncoders();
+        Hubris.setState(4);
+        Hubris.setSpeed(lineFollowSpeed);
+      }
+      break;
+    case 4:  // follow line
+      Hubris.followLine();
+      if (Hubris.buttonPressed()) {
+        Hubris.setState(1);
+      } else if (Hubris.reachedBlackLine()) {
+        Hubris.setState(5);
+      }
+      break;
+    case 5:
+      Hubris.stop();
+      break;
+  }
 
   Serial.print("Runtime:");
   Serial.print(millis() - timestamp);

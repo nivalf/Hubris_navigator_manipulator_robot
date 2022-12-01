@@ -21,7 +21,10 @@ public:
     void testMotors();
     // state
     int getState();
-    void setState(int state);
+    void setState(short int state);
+    // speed
+    void setSpeed(short int speed);
+    void resetSpeed();
     // basic movement
     void moveForward();
     void moveBackward();
@@ -33,7 +36,9 @@ public:
     void moveOneWheelLength();
     // advanced movement
     void followLine();   
-    int movetoBlackLine();
+    bool reachedBlackLine();
+    bool blackLineInProximity();
+    bool buttonPressed();
     // motor & wheels
     void countLeftEncoderChannel_A();
     void countRightEncoderChannel_A();
@@ -44,7 +49,6 @@ public:
     float getRightWheelAngle();
     void resetWheelEncoders();
 
-
 private:
     IR IRLeft;
     IR IRRight;
@@ -53,10 +57,11 @@ private:
     Motor MotorRight;
     BatteryVoltage RobotBatteryVoltage; 
     int speed;
+    short int defaultSpeed;
     int turnSpeed;
     float steeringFactor;
     int steeringCooloffTime;
-    int state;
+    short int state;
 };
 
 #endif
