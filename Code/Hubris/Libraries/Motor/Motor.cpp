@@ -1,5 +1,16 @@
 #include "Motor.h"
 #include "Arduino.h"
+#include "Helpers.h"
+
+/*
+    FIT0450 Micro DC Motor with encoder
+    https://wiki.dfrobot.com/Micro_DC_Motor_with_Encoder-SJ01_SKU__FIT0450
+
+    Gear Ratio: 120:1
+    Pulses per rotation of encoder disk: 8
+    Pulses per rotation of motor shaft: 960
+*/
+const short int PULSES_PER_MOTOR_SHAFT_ROTATION = 960;
 
 // Constructor
 Motor::Motor(int driverInputPin1, int driverInputPin2, int pwmPin, int standbyPin, int encoderPinChannel_A, int encoderPinChannel_B) : // private variables initialization list
@@ -82,7 +93,18 @@ void Motor::countEncoderChannel_A()
     channel_B_state == LOW ? encoderCount++ : encoderCount--;
 }
 
-float Motor::getRotationCount()
+float Motor::getWheelRotationCount()
 {
-    return encoderCount / 960.0;
+    return (float)encoderCount / PULSES_PER_MOTOR_SHAFT_ROTATION;
+}
+
+float Motor::getWheelAngle()
+{
+    return getDecimal(getWheelRotationCount()) * 360.0;
+}
+
+// Reset the encoder value to 0
+void Motor::resetWheelEncoder()
+{
+    encoderCount = 0;
 }

@@ -54,6 +54,9 @@ RobotBatteryVoltage(batteryVoltagePin)
 {
 }
 
+// 1.146067
+const float CORRECTION_FACTOR = 1.13;
+
 // Initialize the robot
 void Robot::init()
 {
@@ -145,7 +148,7 @@ void Robot::testMotors()
 // Move the robot forward
 void Robot::moveForward()
 {
-    MotorLeft.forward(speed);
+    MotorLeft.forward((int)(CORRECTION_FACTOR * speed));
     MotorRight.forward(speed);
 }
 
@@ -243,15 +246,52 @@ void Robot::countRightEncoderChannel_A()
     MotorRight.countEncoderChannel_A();
 }
 
-// Rotation count of the wheels
-void Robot::getLeftWheelRotationCount()
+// Get the rotation count and angle of each wheels
+void Robot::getWheelStats()
 {
-    Serial.print("Left wheel rotation: ");
-    Serial.println(MotorLeft.getRotationCount());
+    Serial.print("Left Wheel>> Rotation Count: ");
+    Serial.print(getLeftWheelRotationCount());
+    Serial.print(" Angle: ");
+    Serial.print(getLeftWheelAngle());
+    Serial.print(" | Right Wheel>> Rotation Count: ");
+    Serial.print(getRightWheelRotationCount());
+    Serial.print(" Angle: ");
+    Serial.println(getLeftWheelAngle());
 }
 
-void Robot::getRightWheelRotationCount()
-{
-    Serial.print("Right wheel rotation: ");
-    Serial.println(MotorLeft.getRotationCount());
+float Robot::getLeftWheelRotationCount() {
+    return MotorLeft.getWheelRotationCount();
+}
+
+float Robot::getLeftWheelAngle() {
+    return MotorLeft.getWheelAngle();
+}
+
+/*  
+    Right wheel rotation is multiplied by -1 to 
+    make the visualise the rotation of both wheels 
+    positive when moving forward
+*/
+float Robot::getRightWheelRotationCount() {
+    return (-1.0) * MotorRight.getWheelRotationCount();
+}
+
+float Robot::getRightWheelAngle() {
+    return (-1.0) * MotorRight.getWheelAngle();
+}
+
+// Reset the encoder values of each motor
+void Robot::resetWheelEncoders() {
+    MotorLeft.resetWheelEncoder();
+    MotorRight.resetWheelEncoder();
+}
+
+void Robot::moveOneWheelLength() {
+    resetWheelEncoders();
+    moveForward();
+    while(getRightWheelRotationCount() < 5.0) {
+        getWheelStats();
+        // loop here
+    }
+    stop();
 }

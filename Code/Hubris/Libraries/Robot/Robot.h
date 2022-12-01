@@ -28,14 +28,21 @@ public:
     void steerLeft();
     void steerRight(); 
     void stop();
+
+    void moveOneWheelLength();
     // advanced movement
     void followLine();   
     int movetoBlackLine();
     // motor & wheels
     void countLeftEncoderChannel_A();
     void countRightEncoderChannel_A();
-    void getLeftWheelRotationCount();
-    void getRightWheelRotationCount();
+    void getWheelStats();
+    float getLeftWheelRotationCount();
+    float getRightWheelRotationCount();
+    float getLeftWheelAngle();
+    float getRightWheelAngle();
+    void resetWheelEncoders();
+
 
 private:
     IR IRLeft;
