@@ -289,7 +289,7 @@ void Robot::resetWheelEncoders() {
 void Robot::moveOneWheelLength() {
     resetWheelEncoders();
     moveForward();
-    while(getRightWheelRotationCount() < 5.0) {
+    while(getLeftWheelRotationCount() < 1.0) {
         getWheelStats();
         // loop here
     }
