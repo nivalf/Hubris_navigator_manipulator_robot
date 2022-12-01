@@ -9,7 +9,7 @@ class BatteryVoltage
 {
 public:
     BatteryVoltage(int pin);
-    int getVoltage();
+    float getVoltage();
     void checkVoltage();
 
 private:

@@ -25,6 +25,7 @@ public:
     // basic movement
     void moveForward();
     void moveBackward();
+    void turnLeft();
     void steerLeft();
     void steerRight(); 
     void stop();

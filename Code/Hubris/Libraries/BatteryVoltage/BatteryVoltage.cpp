@@ -10,10 +10,10 @@ BatteryVoltage::BatteryVoltage(int pin): batteryVoltagePin(pin)
     Vout = Vin * (R2 / (R1 + R2))
     Vout of 3.3k resistor is given to the arduino.
 */
-int BatteryVoltage::getVoltage()
+float BatteryVoltage::getVoltage()
 {
     int batteryReading = analogRead(batteryVoltagePin);
-    float voltage = 5 * (batteryReading / 1023.0) * 5300 / 3300;
+    float voltage = 5.0 * (batteryReading / 1023.0) * 5300 / 3300;
     return voltage;
 }
 

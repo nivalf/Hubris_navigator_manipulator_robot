@@ -25,7 +25,7 @@
 #define motorRightEncoderChannel_B_Pin 5
 
 #define speed 50
-#define turnSpeed 250
+#define turnSpeed 30
 #define steeringFactor 0.2  // percentage
 #define steeringCooloffTime 20
 
@@ -53,12 +53,9 @@ void setup(void) {
 }
 
 void loop(void) {
-  delay(1000);
   timestamp = millis();
 
-  Hubris.moveOneWheelLength();
-  delay(10000);
-
+  Hubris.turnLeft();
   // Hubris.moveForward();
   // Hubris.getWheelStats();
 

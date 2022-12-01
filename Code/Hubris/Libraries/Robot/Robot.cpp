@@ -160,6 +160,18 @@ void Robot::moveBackward()
     MotorRight.reverse(speed);
 }
 
+void Robot::turnLeft()
+{
+    MotorLeft.reverse((int)(CORRECTION_FACTOR * turnSpeed));
+    MotorRight.forward(turnSpeed);
+
+    while(getLeftWheelRotationCount() < 1.0) {
+        // getWheelStats();
+        // loop here
+    }
+    stop();
+}
+
 // Steer the robot left
 void Robot::steerLeft()
 {
@@ -285,6 +297,8 @@ void Robot::resetWheelEncoders() {
     MotorLeft.resetWheelEncoder();
     MotorRight.resetWheelEncoder();
 }
+
+// ***************** TRIALS ***************** //
 
 void Robot::moveOneWheelLength() {
     resetWheelEncoders();
