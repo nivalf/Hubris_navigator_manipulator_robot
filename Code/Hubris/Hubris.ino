@@ -81,7 +81,6 @@ void loop(void) {
     case 3:  // turn left
       if (Hubris.reachedBlackLine()) {
         Hubris.turnLeft();
-        Hubris.resetWheelEncoders();
         Hubris.setState(4);
         Hubris.setSpeed(lineFollowSpeed);
       }

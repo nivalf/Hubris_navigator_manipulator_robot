@@ -179,14 +179,17 @@ void Robot::moveBackward()
 // Turn the robot left 90 degrees
 void Robot::turnLeft()
 {
+    resetWheelEncoders();
+
     MotorLeft.reverse((int)(CORRECTION_FACTOR * turnSpeed));
     MotorRight.forward(turnSpeed);
 
     while (getLeftWheelRotationCount() < 0.651152)
     {
-        // getWheelStats();
-        // loop here
+        // stay here until the robot has turned 90 degrees
     }
+
+    resetWheelEncoders();
     stop();
 }
 
