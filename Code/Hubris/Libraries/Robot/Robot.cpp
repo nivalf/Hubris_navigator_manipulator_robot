@@ -38,7 +38,7 @@
         UltrasonicFront
  */
 Robot::Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int motorLeftPin1, int motorLeftPin2, int motorLeftStandbyPin, int motorLeftPwmPin, int motorLeftEncoderChannel_A_Pin, int motorLeftEncoderChannel_B_Pin, int motorRightPin1, int motorRightPin2, int motorRightStandbyPin, int motorRightPwmPin, int motorRightEncoderChannel_A_Pin, int motorRightEncoderChannel_B_Pin, int batteryVoltagePin) : // private variables
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      state(1),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      state(0),
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       speed(speed),
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       defaultSpeed(speed),
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       turnSpeed(turnSpeed),
@@ -55,9 +55,11 @@ Robot::Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloff
 }
 
 // 1.146067
-const float CORRECTION_FACTOR = 1.13;
+// SPIN CIRCUMFERENCE
+// const float CORRECTION_FACTOR = 1.13;
+const float CORRECTION_FACTOR = 1.08;
 const float WHEEL_CIRCUMFERENCE = 21.7; // in cm
-const float QUARTER_WHEEL_LENGTH = 0.717; // in cm
+const float ROTATION_FOR_QUARTER_SPIN_CIRCUMFERENCE = 0.717; // rotation of the wheel to move quarter of the circle
 
 // Initialize the robot
 void Robot::init()
@@ -84,7 +86,7 @@ int Robot::getState()
 // ***************** TESTS ***************** //
 
 // Test the sensors & print the values
-void Robot::testIRSensors()
+void Robot::logIRSensorValues()
 {
     Serial.print("IR_Left:");
     Serial.print(IRLeft.read());
@@ -100,7 +102,7 @@ void Robot::testIRSensors()
 }
 
 // Test ultrasonic sensor & print the values
-void Robot::testUltraSonicSensor()
+void Robot::logUltraSonicSensorValues()
 {
     Serial.print("Dist:");
     Serial.print(UltrasonicFront.getDistance());
@@ -115,8 +117,8 @@ void Robot::testUltraSonicSensor()
 // Test the sensors & print the values
 void Robot::testSensors()
 {
-    testIRSensors();
-    testUltraSonicSensor();
+    logIRSensorValues();
+    logUltraSonicSensorValues();
 }
 
 // Test the motors
@@ -148,6 +150,13 @@ void Robot::testMotors()
     delay(1000);
 }
 
+// ***************** SENSORS ***************** //
+float Robot::getFrontDistance()
+{
+    logUltraSonicSensorValues();
+    return UltrasonicFront.getDistanceExpAvg();
+}
+
 // ***************** SPEED ***************** //
 // Set the speed of the robot
 void Robot::setSpeed(short int speed)
@@ -160,7 +169,6 @@ void Robot::resetSpeed()
 {
     this->speed = this->defaultSpeed;
 }
-
 // ***************** BASIC MOVEMENT ***************** //
 
 // Move the robot forward
@@ -173,7 +181,7 @@ void Robot::moveForward()
 // Move the robot backward
 void Robot::moveBackward()
 {
-    MotorLeft.reverse(speed);
+    MotorLeft.reverse((int)(CORRECTION_FACTOR * speed));
     MotorRight.reverse(speed);
 }
 
@@ -189,8 +197,8 @@ void Robot::turnLeft()
 
     while (turning)
     {   
-        bool leftWheelTurned = abs(getLeftWheelRotationCount()) > QUARTER_WHEEL_LENGTH;
-        bool rightWheelTurned = abs(getRightWheelRotationCount()) > QUARTER_WHEEL_LENGTH;
+        bool leftWheelTurned = abs(getLeftWheelRotationCount()) > ROTATION_FOR_QUARTER_SPIN_CIRCUMFERENCE;
+        bool rightWheelTurned = abs(getRightWheelRotationCount()) > ROTATION_FOR_QUARTER_SPIN_CIRCUMFERENCE;
         
         // Stop left wheel once it has covered quarter wheel length
         if(leftWheelTurned){
@@ -244,6 +252,8 @@ void Robot::followLine()
     int leftIR = IRLeft.digitalRead();   // 0 for black, 1 for white
     int rightIR = IRRight.digitalRead(); // 0 for black, 1 for white
 
+    testSensors();
+
     if (leftIR < rightIR)
     {
         steerLeft();
@@ -256,22 +266,24 @@ void Robot::followLine()
         delay(steeringCooloffTime);
     }
 
-    if (rightIR == leftIR)
-    {
+    // if (rightIR == leftIR)
+    // {
         moveForward();
-    }
+    // }
 }
 
 // Ultrasonic value < 35
 // Wheel rotation count < 60/WHEEL_CIRCUMFERENCE
 bool Robot::blackLineInProximity()
 {
+    testSensors();
     return (UltrasonicFront.getDistance_RunningAvg() < 35) && (getLeftWheelRotationCount() < 60 / WHEEL_CIRCUMFERENCE);
 }
 
 // Reached the black line
 bool Robot::reachedBlackLine()
 {
+    testSensors();
     int leftIR = IRLeft.digitalRead();
     int rightIR = IRRight.digitalRead();
 
@@ -353,10 +365,16 @@ void Robot::moveOneWheelLength()
 {
     resetWheelEncoders();
     moveForward();
-    while (getLeftWheelRotationCount() < 1.0)
+
+    bool moving = true;
+
+    while (moving)
     {
-        getWheelStats();
-        // loop here
+        if(abs(getLeftWheelRotationCount()) >= 1.0){
+            MotorLeft.brake();
+        }
+        if(abs(getRightWheelRotationCount()) >= 1.0){
+            MotorRight.brake();
+        }
     }
-    stop();
 }

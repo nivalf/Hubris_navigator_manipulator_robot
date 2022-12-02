@@ -24,10 +24,10 @@
 #define motorRightEncoderChannel_A_Pin 3
 #define motorRightEncoderChannel_B_Pin 5
 
-#define speed 150
-#define reducedSpeed 50
+#define speed 100
+#define reducedSpeed 30
 #define lineFollowSpeed 50
-#define turnSpeed 30
+#define turnSpeed 50
 
 #define steeringFactor 0.2  // percentage
 #define steeringCooloffTime 20
@@ -54,58 +54,21 @@ void setup(void) {
   attachInterrupt(digitalPinToInterrupt(motorRightEncoderChannel_A_Pin), motorRightISR, RISING);
 
   Hubris.init();
+
+  // DEV NOTE: Remove when not testing
+  delay(2000);
 }
 
 void loop(void) {
   timestamp = millis();
 
-  while (count < 4) {
-    Hubris.turnLeft();
-    Serial.println("One loop completed");
-    delay(1000);
-    count++;  
-  }
-  return;
-  // Hubris.moveForward();
-  // Hubris.getWheelStats();
 
-  // Hubris.resetWheelEncoders();
-
-  switch (Hubris.getState()) {
-      //   case 0:  // calibration
-      //     break;
-    case 1:  // go forward
-      Hubris.resetSpeed();
-      Hubris.moveForward();
-      Hubris.setState(2);
-      break;
-    case 2:  // reduce speed
-      if (Hubris.blackLineInProximity()) {
-        Hubris.setSpeed(reducedSpeed);
-        Hubris.setState(3);
-      }
-      break;
-    case 3:  // turn left
-      if (Hubris.reachedBlackLine()) {
-        Hubris.turnLeft();
-        Hubris.setState(4);
-        Hubris.setSpeed(lineFollowSpeed);
-      }
-      break;
-    case 4:  // follow line
-      Hubris.followLine();
-      if (Hubris.buttonPressed()) {
-        Hubris.setState(1);
-      } else if (Hubris.reachedBlackLine()) {
-        Hubris.setState(5);
-      }
-      break;
-    case 5:
-      Hubris.stop();
-      break;
-  }
+  // operate();
+  ultraSonicMode();
 
   Serial.print("Runtime:");
   Serial.print(millis() - timestamp);
   Serial.println(' ');
+  Serial.print("Hubris State:");
+  Serial.println(Hubris.getState());
 }

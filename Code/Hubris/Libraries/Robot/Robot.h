@@ -15,13 +15,15 @@ public:
     Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int motorLeftPin1, int motorLeftPin2, int motorLeftStandbyPin, int motorLeftPwmPin, int motorLeftEncoderChannel_A_Pin, int motorLeftEncoderChannel_B_Pin, int motorRightPin1, int motorRightPin2, int motorRightStandbyPin, int motorRightPwmPin, int motorRightEncoderChannel_A_Pin, int motorRightEncoderChannel_B_Pin, int batteryVoltagePin);
     void init();
     // test
-    void testIRSensors();
-    void testUltraSonicSensor();
+    void logIRSensorValues();
+    void logUltraSonicSensorValues();
     void testSensors();
     void testMotors();
     // state
     int getState();
     void setState(short int state);
+    // sensors
+    float getFrontDistance();
     // speed
     void setSpeed(short int speed);
     void resetSpeed();
