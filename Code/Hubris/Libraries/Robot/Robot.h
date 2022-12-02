@@ -30,7 +30,8 @@ public:
     // basic movement
     void moveForward();
     void moveBackward();
-    void turnLeft();
+    void turn90Left();
+    void turn360Left();
     void steerLeft();
     void steerRight(); 
     void stop();

@@ -59,7 +59,7 @@ Robot::Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloff
 // const float CORRECTION_FACTOR = 1.13;
 const float CORRECTION_FACTOR = 1.08;
 const float WHEEL_CIRCUMFERENCE = 21.7; // in cm
-const float ROTATION_FOR_QUARTER_SPIN_CIRCUMFERENCE = 0.717; // rotation of the wheel to move quarter of the circle
+const float ROTATION_FOR_QUARTER_SPIN_CIRCUMFERENCE = 0.693; // rotation of the wheel to move quarter of the circle
 
 // Initialize the robot
 void Robot::init()
@@ -186,11 +186,11 @@ void Robot::moveBackward()
 }
 
 // Turn the robot left 90 degrees
-void Robot::turnLeft()
+void Robot::turn90Left()
 {
     resetWheelEncoders();
 
-    MotorLeft.reverse((int)(CORRECTION_FACTOR * turnSpeed));
+    MotorLeft.reverse(turnSpeed);
     MotorRight.forward(turnSpeed);
 
     bool turning = true;
@@ -217,6 +217,19 @@ void Robot::turnLeft()
     }
 
     resetWheelEncoders();
+}
+
+
+// Turn the robot left 360 degrees
+void Robot::turn360Left()
+{
+    short int count = 0;
+    while (count < 4)
+    {
+        turn90Left();
+        delay(500);
+        count++;
+    }
 }
 
 // Steer the robot left

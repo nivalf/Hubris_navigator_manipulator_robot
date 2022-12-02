@@ -1,4 +1,4 @@
-void ultraSonicMode() {
+void operate() {
   switch (Hubris.getState()) {
       //   case 0:  // calibration
       //     break;
@@ -15,7 +15,7 @@ void ultraSonicMode() {
       break;
     case 3:  // turn left
       if (Hubris.reachedBlackLine()) {
-        Hubris.turnLeft();
+        Hubris.turn90Left();
         Hubris.setState(4);
         Hubris.setSpeed(lineFollowSpeed);
       }

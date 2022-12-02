@@ -35,7 +35,6 @@
 Robot Hubris(speed, turnSpeed, steeringFactor, steeringCooloffTime, IRLeftAPin, IRRightAPin, trigPin, echoPin, motorLeftPin1, motorLeftPin2, motorLeftStandbyPin, motorLeftPWMPin, motorLeftEncoderChannel_A_Pin, motorLeftEncoderChannel_B_Pin, motorRightPin2, motorRightPin1, motorRightStandbyPin, motorRightPWMPin, motorRightEncoderChannel_A_Pin, motorRightEncoderChannel_B_Pin, batteryVoltagePin);
 
 long timestamp;
-int count = 0;
 
 // ISRs : Interrupt Service Routines
 void motorLeftISR() {
@@ -56,14 +55,11 @@ void setup(void) {
   Hubris.init();
 
   // DEV NOTE: Remove when not testing
-  delay(2000);
+  delay(1000);
 }
 
 void loop(void) {
   timestamp = millis();
-
-
-  // operate();
   ultraSonicMode();
 
   Serial.print("Runtime:");

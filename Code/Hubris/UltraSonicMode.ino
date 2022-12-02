@@ -14,7 +14,7 @@ void ultraSonicMode() {
       break;
     case 2:  // turn left
       if (Hubris.getFrontDistance() < 13.0) {
-        Hubris.turnLeft();
+        Hubris.turn90Left();
         Hubris.setState(3);
       }
       break;
@@ -38,7 +38,7 @@ void ultraSonicMode() {
       break;
     case 6:
       if (Hubris.getFrontDistance() > 20.0) {
-        Hubris.turnLeft();
+        Hubris.turn90Left();
         Hubris.setState(0);
       }
   }
