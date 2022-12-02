@@ -38,7 +38,7 @@
         UltrasonicFront
  */
 Robot::Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int motorLeftPin1, int motorLeftPin2, int motorLeftStandbyPin, int motorLeftPwmPin, int motorLeftEncoderChannel_A_Pin, int motorLeftEncoderChannel_B_Pin, int motorRightPin1, int motorRightPin2, int motorRightStandbyPin, int motorRightPwmPin, int motorRightEncoderChannel_A_Pin, int motorRightEncoderChannel_B_Pin, int batteryVoltagePin) : // private variables
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      state(0),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      state(1),
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       speed(speed),
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       defaultSpeed(speed),
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       turnSpeed(turnSpeed),
@@ -57,6 +57,7 @@ Robot::Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloff
 // 1.146067
 const float CORRECTION_FACTOR = 1.13;
 const float WHEEL_CIRCUMFERENCE = 21.7; // in cm
+const float QUARTER_WHEEL_LENGTH = 0.717; // in cm
 
 // Initialize the robot
 void Robot::init()
@@ -184,13 +185,30 @@ void Robot::turnLeft()
     MotorLeft.reverse((int)(CORRECTION_FACTOR * turnSpeed));
     MotorRight.forward(turnSpeed);
 
-    while (getLeftWheelRotationCount() < 0.651152)
-    {
-        // stay here until the robot has turned 90 degrees
+    bool turning = true;
+
+    while (turning)
+    {   
+        bool leftWheelTurned = abs(getLeftWheelRotationCount()) > QUARTER_WHEEL_LENGTH;
+        bool rightWheelTurned = abs(getRightWheelRotationCount()) > QUARTER_WHEEL_LENGTH;
+        
+        // Stop left wheel once it has covered quarter wheel length
+        if(leftWheelTurned){
+            MotorLeft.brake();
+        }
+        // Stop right wheel once it has covered quarter wheel length
+        if(rightWheelTurned){
+            MotorRight.brake();
+        }
+
+        // Stop turning once both wheels have covered quarter wheel length
+        if (leftWheelTurned && rightWheelTurned)
+        {
+            turning = false;
+        }
     }
 
     resetWheelEncoders();
-    stop();
 }
 
 // Steer the robot left
