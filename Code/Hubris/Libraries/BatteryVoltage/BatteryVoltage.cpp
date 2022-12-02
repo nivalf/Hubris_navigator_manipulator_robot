@@ -1,6 +1,6 @@
 #include "BatteryVoltage.h"
 
-BatteryVoltage::BatteryVoltage(int pin): batteryVoltagePin(pin)
+BatteryVoltage::BatteryVoltage(int pin) : batteryVoltagePin(pin)
 {
     pinMode(batteryVoltagePin, INPUT);
 }
@@ -13,7 +13,7 @@ BatteryVoltage::BatteryVoltage(int pin): batteryVoltagePin(pin)
 float BatteryVoltage::getVoltage()
 {
     int batteryReading = analogRead(batteryVoltagePin);
-    float voltage = 5.0 * (batteryReading / 1023.0) * 5300 / 3300;
+    float voltage = 5.0 * ((batteryReading - 153) / 1023.0) * 5500 / 3300;
     return voltage;
 }
 

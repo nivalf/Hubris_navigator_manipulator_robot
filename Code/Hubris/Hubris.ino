@@ -25,7 +25,7 @@
 #define motorRightEncoderChannel_B_Pin 5
 
 #define speed 100
-#define reducedSpeed 30
+#define reducedSpeed 40
 #define lineFollowSpeed 50
 #define turnSpeed 50
 
@@ -35,6 +35,7 @@
 Robot Hubris(speed, turnSpeed, steeringFactor, steeringCooloffTime, IRLeftAPin, IRRightAPin, trigPin, echoPin, motorLeftPin1, motorLeftPin2, motorLeftStandbyPin, motorLeftPWMPin, motorLeftEncoderChannel_A_Pin, motorLeftEncoderChannel_B_Pin, motorRightPin2, motorRightPin1, motorRightStandbyPin, motorRightPWMPin, motorRightEncoderChannel_A_Pin, motorRightEncoderChannel_B_Pin, batteryVoltagePin);
 
 long timestamp;
+int count = 0;
 
 // ISRs : Interrupt Service Routines
 void motorLeftISR() {
@@ -60,7 +61,17 @@ void setup(void) {
 
 void loop(void) {
   timestamp = millis();
-  ultraSonicMode();
+
+  Hubris.moveForward()
+
+  // while(count < 1) {
+  //   Hubris.turn360Left();
+  //   count++;
+  // }
+
+
+  // operate();
+  // ultraSonicMode();
 
   Serial.print("Runtime:");
   Serial.print(millis() - timestamp);

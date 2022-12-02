@@ -36,7 +36,6 @@ public:
     void steerRight(); 
     void stop();
 
-    void moveOneWheelLength();
     // advanced movement
     void followLine();   
     bool reachedBlackLine();
@@ -45,12 +44,15 @@ public:
     // motor & wheels
     void countLeftEncoderChannel_A();
     void countRightEncoderChannel_A();
-    void getWheelStats();
+    void logWheelStats();
     float getLeftWheelRotationCount();
     float getRightWheelRotationCount();
     float getLeftWheelAngle();
     float getRightWheelAngle();
     void resetWheelEncoders();
+    void reOrient();
+    // trials
+    void moveOneWheelLength();
 
 private:
     IR IRLeft;

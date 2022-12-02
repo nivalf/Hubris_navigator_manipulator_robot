@@ -58,7 +58,7 @@ Robot::Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloff
 // SPIN CIRCUMFERENCE
 // const float CORRECTION_FACTOR = 1.13;
 const float CORRECTION_FACTOR = 1.08;
-const float WHEEL_CIRCUMFERENCE = 21.7; // in cm
+const float WHEEL_CIRCUMFERENCE = 21.7;                      // in cm
 const float ROTATION_FOR_QUARTER_SPIN_CIRCUMFERENCE = 0.693; // rotation of the wheel to move quarter of the circle
 
 // Initialize the robot
@@ -153,8 +153,9 @@ void Robot::testMotors()
 // ***************** SENSORS ***************** //
 float Robot::getFrontDistance()
 {
-    logUltraSonicSensorValues();
-    return UltrasonicFront.getDistanceExpAvg();
+    // logUltraSonicSensorValues();
+    // logWheelStats();
+    return UltrasonicFront.getDistance();
 }
 
 // ***************** SPEED ***************** //
@@ -174,6 +175,7 @@ void Robot::resetSpeed()
 // Move the robot forward
 void Robot::moveForward()
 {
+    reOrient();
     MotorLeft.forward((int)(CORRECTION_FACTOR * speed));
     MotorRight.forward(speed);
 }
@@ -188,6 +190,7 @@ void Robot::moveBackward()
 // Turn the robot left 90 degrees
 void Robot::turn90Left()
 {
+    // reOrient();
     resetWheelEncoders();
 
     MotorLeft.reverse(turnSpeed);
@@ -196,16 +199,18 @@ void Robot::turn90Left()
     bool turning = true;
 
     while (turning)
-    {   
+    {
         bool leftWheelTurned = abs(getLeftWheelRotationCount()) > ROTATION_FOR_QUARTER_SPIN_CIRCUMFERENCE;
         bool rightWheelTurned = abs(getRightWheelRotationCount()) > ROTATION_FOR_QUARTER_SPIN_CIRCUMFERENCE;
-        
+
         // Stop left wheel once it has covered quarter wheel length
-        if(leftWheelTurned){
+        if (leftWheelTurned)
+        {
             MotorLeft.brake();
         }
         // Stop right wheel once it has covered quarter wheel length
-        if(rightWheelTurned){
+        if (rightWheelTurned)
+        {
             MotorRight.brake();
         }
 
@@ -214,11 +219,11 @@ void Robot::turn90Left()
         {
             turning = false;
         }
+        // logWheelStats();
     }
 
     resetWheelEncoders();
 }
-
 
 // Turn the robot left 360 degrees
 void Robot::turn360Left()
@@ -281,7 +286,7 @@ void Robot::followLine()
 
     // if (rightIR == leftIR)
     // {
-        moveForward();
+    moveForward();
     // }
 }
 
@@ -328,7 +333,7 @@ void Robot::countRightEncoderChannel_A()
 }
 
 // Get the rotation count and angle of each wheels
-void Robot::getWheelStats()
+void Robot::logWheelStats()
 {
     Serial.print("Left Wheel>> Rotation Count: ");
     Serial.print(getLeftWheelRotationCount());
@@ -372,6 +377,46 @@ void Robot::resetWheelEncoders()
     MotorRight.resetWheelEncoder();
 }
 
+// ReOrient the robot to straight position. The bot gets tilted due to difference in the motors
+void Robot::reOrient()
+{
+    stop();
+    const float TOLERANCE = 0.01; // Allowed tolerance of difference b/w the two wheel rotations
+    float diff = abs(getLeftWheelRotationCount() - getRightWheelRotationCount());
+    Serial.println("Reorienting the bot... ");
+    Serial.print("Difference in wheel rotations: ");
+    Serial.print(diff);
+    Serial.print(", Left Wheel Rotation: ");
+    Serial.print(getLeftWheelRotationCount());
+    Serial.print(", Right Wheel Rotation: ");
+    Serial.println(getRightWheelRotationCount());
+
+    while (diff > TOLERANCE)
+    {
+        // logWheelStats();
+        if (getLeftWheelRotationCount() > getRightWheelRotationCount())
+        {
+            MotorLeft.brake();
+            MotorRight.forward(turnSpeed);
+        }
+        else if (getLeftWheelRotationCount() < getRightWheelRotationCount())
+        {
+            MotorLeft.forward(turnSpeed);
+            MotorRight.brake();
+        }
+        diff = abs(getLeftWheelRotationCount() - getRightWheelRotationCount());
+    }
+    stop();
+
+    Serial.println("Orientation Complete... ");
+    Serial.print("Difference in wheel rotations: ");
+    Serial.print(diff);
+    Serial.print(", Left Wheel Rotation: ");
+    Serial.print(getLeftWheelRotationCount());
+    Serial.print(", Right Wheel Rotation: ");
+    Serial.println(getRightWheelRotationCount());
+}
+
 // ***************** TRIALS ***************** //
 
 void Robot::moveOneWheelLength()
@@ -383,10 +428,12 @@ void Robot::moveOneWheelLength()
 
     while (moving)
     {
-        if(abs(getLeftWheelRotationCount()) >= 1.0){
+        if (abs(getLeftWheelRotationCount()) >= 1.0)
+        {
             MotorLeft.brake();
         }
-        if(abs(getRightWheelRotationCount()) >= 1.0){
+        if (abs(getRightWheelRotationCount()) >= 1.0)
+        {
             MotorRight.brake();
         }
     }
