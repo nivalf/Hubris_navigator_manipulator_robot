@@ -175,7 +175,7 @@ void Robot::resetSpeed()
 // Move the robot forward
 void Robot::moveForward()
 {
-    reOrient();
+    // reOrient();
     MotorLeft.forward((int)(CORRECTION_FACTOR * speed));
     MotorRight.forward(speed);
 }
@@ -291,11 +291,13 @@ void Robot::followLine()
 }
 
 // Ultrasonic value < 35
-// Wheel rotation count < 60/WHEEL_CIRCUMFERENCE
 bool Robot::blackLineInProximity()
 {
-    testSensors();
-    return (UltrasonicFront.getDistance_RunningAvg() < 35) && (getLeftWheelRotationCount() < 60 / WHEEL_CIRCUMFERENCE);
+    // testSensors();
+    float dist = getFrontDistance();
+    Serial.print("Dist:");
+    Serial.println(dist);
+    return (dist < 35.0);
 }
 
 // Reached the black line

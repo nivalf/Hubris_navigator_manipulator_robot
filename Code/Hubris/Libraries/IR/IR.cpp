@@ -13,7 +13,7 @@ void IR::init()
     // initialize variables for digital conversion
     max = 300;
     upper_cutoff = 0.8 * max;
-    lower_cutoff = 0.4 * max;
+    lower_cutoff = 0.5 * max;
 
     // initialize digital value
     digitalValue = true;

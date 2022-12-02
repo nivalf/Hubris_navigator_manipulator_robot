@@ -25,7 +25,7 @@
 #define motorRightEncoderChannel_B_Pin 5
 
 #define speed 100
-#define reducedSpeed 40
+#define reducedSpeed 30
 #define lineFollowSpeed 50
 #define turnSpeed 50
 
@@ -62,7 +62,8 @@ void setup(void) {
 void loop(void) {
   timestamp = millis();
 
-  Hubris.moveForward()
+  // Hubris.moveForward();
+  // Hubris.logIRSensorValues();
 
   // while(count < 1) {
   //   Hubris.turn360Left();
@@ -70,7 +71,7 @@ void loop(void) {
   // }
 
 
-  // operate();
+  operate();
   // ultraSonicMode();
 
   Serial.print("Runtime:");
