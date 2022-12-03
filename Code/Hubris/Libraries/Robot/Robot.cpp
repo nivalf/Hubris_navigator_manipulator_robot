@@ -240,19 +240,15 @@ void Robot::turn360Left()
 // Steer the robot left
 void Robot::steerLeft()
 {
-    int reducedSpeed = speed * (1 - steeringFactor);
-
-    MotorLeft.forward(reducedSpeed);
-    MotorRight.forward(speed);
+    MotorLeft.forward(speed);
+    MotorRight.forward(speed * (1 + steeringFactor));
 }
 
 // Steer the robot right
 void Robot::steerRight()
 {
-    int reducedSpeed = speed * (1 - steeringFactor);
-
-    MotorLeft.forward(speed);
-    MotorRight.forward(reducedSpeed);
+    MotorLeft.forward(speed * (1 + steeringFactor));
+    MotorRight.forward(speed);
 }
 
 // Stop the bot
@@ -270,24 +266,24 @@ void Robot::followLine()
     int leftIR = IRLeft.digitalRead();   // 0 for black, 1 for white
     int rightIR = IRRight.digitalRead(); // 0 for black, 1 for white
 
-    testSensors();
+    Serial.print("leftIR:");
+    Serial.print(leftIR);
+    Serial.print(" ");
+    Serial.print("rightIR:");
+    Serial.println(rightIR);
 
     if (leftIR < rightIR)
     {
         steerLeft();
-        delay(steeringCooloffTime);
     }
-
-    if (rightIR < leftIR)
+    else if (rightIR < leftIR)
     {
         steerRight();
-        delay(steeringCooloffTime);
     }
-
-    // if (rightIR == leftIR)
-    // {
-    moveForward();
-    // }
+    else
+    {
+        moveForward();
+    }
 }
 
 // Ultrasonic value < 35
@@ -303,7 +299,6 @@ bool Robot::blackLineInProximity()
 // Reached the black line
 bool Robot::reachedBlackLine()
 {
-    testSensors();
     int leftIR = IRLeft.digitalRead();
     int rightIR = IRRight.digitalRead();
 

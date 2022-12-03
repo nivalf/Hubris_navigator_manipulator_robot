@@ -11,7 +11,7 @@
     Pulses per rotation of motor shaft: 960
 */
 
-// DEV NOTE: 
+// DEV NOTE:
 // Wheel rotates more than 1 when 960 is used.
 // By trials, a value around 910 performs better.
 const short int PULSES_PER_MOTOR_SHAFT_ROTATION = 960;

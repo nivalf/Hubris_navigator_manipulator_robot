@@ -18,21 +18,26 @@ void operate() {
     case 3:  // turn left
       if (Hubris.reachedBlackLine()) {
         Hubris.turn90Left();
-        Hubris.setState(5);
+        Hubris.setState(4);
         Hubris.setSpeed(lineFollowSpeed);
       }
       break;
     case 4:  // follow line
       Hubris.followLine();
-      if (Hubris.buttonPressed()) {
-        Hubris.setState(1);
+      if (Hubris.getFrontDistance() < 6.0) {  // marker pressed
+        Hubris.reOrient();
+        Hubris.moveBackward();
+        Hubris.setState(5);
       }
-      // else if (Hubris.reachedBlackLine()) {
-      //   Hubris.setState(5);
-      // }
       break;
     case 5:
-      Hubris.stop();
+      if (Hubris.getFrontDistance() > 13.0) {
+        Hubris.turn90Left();
+        Hubris.setState(0);
+      }
       break;
+    // case 6:
+    //   Hubris.stop();
+    //   break;
   }
 }
