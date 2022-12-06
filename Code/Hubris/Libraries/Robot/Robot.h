@@ -14,11 +14,6 @@ class Robot
 public:
     Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int motorLeftPin1, int motorLeftPin2, int motorLeftStandbyPin, int motorLeftPwmPin, int motorLeftEncoderChannel_A_Pin, int motorLeftEncoderChannel_B_Pin, int motorRightPin1, int motorRightPin2, int motorRightStandbyPin, int motorRightPwmPin, int motorRightEncoderChannel_A_Pin, int motorRightEncoderChannel_B_Pin, int batteryVoltagePin);
     void init();
-    // test
-    void logIRSensorValues();
-    void logUltraSonicSensorValues();
-    void testSensors();
-    void testMotors();
     // state
     int getState();
     void setState(short int state);
@@ -45,6 +40,8 @@ public:
     void countLeftEncoderChannel_A();
     void countRightEncoderChannel_A();
     void logWheelStats();
+    int getLeftWheelEncoderCount();
+    int getRightWheelEncoderCount();
     float getLeftWheelRotationCount();
     float getRightWheelRotationCount();
     float getLeftWheelAngle();
@@ -53,6 +50,13 @@ public:
     void reOrient();
     // trials
     void moveOneWheelLength();
+    // test
+    void logIRSensorValues();
+    void logUltraSonicSensorValues();
+    void testSensors();
+    void testMotors();
+    void logEncoderValues();
+    void testDragAtDifferentSpeeds();
 
 private:
     IR IRLeft;

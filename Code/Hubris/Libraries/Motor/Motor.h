@@ -19,6 +19,7 @@ class Motor
     float getWheelRotationCount();
     float getWheelAngle();
     void resetWheelEncoder();
+    int getEncoderCount();
   private:
     int driverInputPin1;
     int driverInputPin2;

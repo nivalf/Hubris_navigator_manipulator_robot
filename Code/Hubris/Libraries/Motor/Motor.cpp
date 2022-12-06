@@ -12,9 +12,9 @@
 */
 
 // DEV NOTE:
-// Wheel rotates more than 1 when 960 is used.
-// By trials, a value around 910 performs better.
-const short int PULSES_PER_MOTOR_SHAFT_ROTATION = 960;
+// Theoretical value is 960, 
+// But it was found to be 970 by experiment
+const short int PULSES_PER_MOTOR_SHAFT_ROTATION = 970;
 
 // Constructor
 Motor::Motor(int driverInputPin1, int driverInputPin2, int pwmPin, int standbyPin, int encoderPinChannel_A, int encoderPinChannel_B) : // private variables initialization list
@@ -97,6 +97,13 @@ void Motor::countEncoderChannel_A()
     channel_B_state == LOW ? encoderCount++ : encoderCount--;
 }
 
+// Return the encoder count
+int Motor::getEncoderCount()
+{
+    return encoderCount;
+}
+
+// Return the wheel rotation count
 float Motor::getWheelRotationCount()
 {
     return (float)encoderCount / PULSES_PER_MOTOR_SHAFT_ROTATION;

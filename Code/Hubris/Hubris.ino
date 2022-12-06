@@ -24,7 +24,7 @@
 #define motorRightEncoderChannel_A_Pin 3
 #define motorRightEncoderChannel_B_Pin 5
 
-#define speed 100
+#define speed 150
 #define reducedSpeed 30
 #define lineFollowSpeed 40
 #define turnSpeed 50
@@ -61,11 +61,13 @@ void setup(void) {
 
 void loop(void) {
   timestamp = millis();
-  IR_US_operate();
+  // IR_US_operate();
 
-  Serial.print("Runtime:");
-  Serial.print(millis() - timestamp);
-  Serial.println(' ');
-  Serial.print("Hubris State:");
-  Serial.println(Hubris.getState());
+  Hubris.testDragAtDifferentSpeeds();
+
+  // Serial.print("Runtime:");
+  // Serial.print(millis() - timestamp);
+  // Serial.println(' ');
+  // Serial.print("Hubris State:");
+  // Serial.println(Hubris.getState());
 }

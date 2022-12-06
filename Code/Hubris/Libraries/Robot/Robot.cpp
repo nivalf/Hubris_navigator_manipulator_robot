@@ -83,73 +83,6 @@ int Robot::getState()
     return this->state;
 }
 
-// ***************** TESTS ***************** //
-
-// Test the sensors & print the values
-void Robot::logIRSensorValues()
-{
-    Serial.print("IR_Left:");
-    Serial.print(IRLeft.read());
-    Serial.print(" ");
-    Serial.print("IR_Right:");
-    Serial.print(IRRight.read());
-    Serial.print(" ");
-    Serial.print("IR_Left(digital)*300:");
-    Serial.print(IRLeft.digitalRead() * 300);
-    Serial.print(" ");
-    Serial.print("IR_Right(digital)*300:");
-    Serial.println(IRRight.digitalRead() * 300);
-}
-
-// Test ultrasonic sensor & print the values
-void Robot::logUltraSonicSensorValues()
-{
-    Serial.print("Dist:");
-    Serial.print(UltrasonicFront.getDistance());
-    Serial.print(" ");
-    Serial.print("Dist(exp_avg):");
-    Serial.print(UltrasonicFront.getDistanceExpAvg());
-    Serial.print(" ");
-    Serial.print("Dist(running_avg):");
-    Serial.println(UltrasonicFront.getDistance_RunningAvg());
-}
-
-// Test the sensors & print the values
-void Robot::testSensors()
-{
-    logIRSensorValues();
-    logUltraSonicSensorValues();
-}
-
-// Test the motors
-void Robot::testMotors()
-{
-    MotorLeft.forward(255);
-    MotorRight.forward(255);
-    delay(1000);
-    MotorLeft.brake();
-    MotorRight.brake();
-    delay(1000);
-    MotorLeft.reverse(255);
-    MotorRight.reverse(255);
-    delay(1000);
-    MotorLeft.brake();
-    MotorRight.brake();
-    delay(1000);
-    MotorLeft.forward(255);
-    MotorRight.reverse(255);
-    delay(1000);
-    MotorLeft.brake();
-    MotorRight.brake();
-    delay(1000);
-    MotorLeft.reverse(255);
-    MotorRight.forward(255);
-    delay(1000);
-    MotorLeft.brake();
-    MotorRight.brake();
-    delay(1000);
-}
-
 // ***************** SENSORS ***************** //
 float Robot::getFrontDistance()
 {
@@ -342,6 +275,11 @@ void Robot::logWheelStats()
     Serial.println(getLeftWheelAngle());
 }
 
+int Robot::getLeftWheelEncoderCount()
+{
+    return MotorLeft.getEncoderCount();
+}
+
 float Robot::getLeftWheelRotationCount()
 {
     return MotorLeft.getWheelRotationCount();
@@ -357,6 +295,12 @@ float Robot::getLeftWheelAngle()
     make the visualise the rotation of both wheels
     positive when moving forward
 */
+
+int Robot::getRightWheelEncoderCount()
+{
+    return (-1.0) * MotorRight.getEncoderCount();
+}
+
 float Robot::getRightWheelRotationCount()
 {
     return (-1.0) * MotorRight.getWheelRotationCount();
@@ -434,4 +378,163 @@ void Robot::moveOneWheelLength()
             MotorRight.brake();
         }
     }
+}
+
+// ***************** TESTS ***************** //
+
+// Test the sensors & print the values
+void Robot::logIRSensorValues()
+{
+    Serial.print("IR_Left:");
+    Serial.print(IRLeft.read());
+    Serial.print(" ");
+    Serial.print("IR_Right:");
+    Serial.print(IRRight.read());
+    Serial.print(" ");
+    Serial.print("IR_Left(digital)*300:");
+    Serial.print(IRLeft.digitalRead() * 300);
+    Serial.print(" ");
+    Serial.print("IR_Right(digital)*300:");
+    Serial.println(IRRight.digitalRead() * 300);
+}
+
+// Test ultrasonic sensor & print the values
+void Robot::logUltraSonicSensorValues()
+{
+    Serial.print("Dist:");
+    Serial.print(UltrasonicFront.getDistance());
+    Serial.print(" ");
+    Serial.print("Dist(exp_avg):");
+    Serial.print(UltrasonicFront.getDistanceExpAvg());
+    Serial.print(" ");
+    Serial.print("Dist(running_avg):");
+    Serial.println(UltrasonicFront.getDistance_RunningAvg());
+}
+
+// Test the sensors & print the values
+void Robot::testSensors()
+{
+    logIRSensorValues();
+    logUltraSonicSensorValues();
+}
+
+// Print the encoder values of each wheel
+void Robot::logEncoderValues()
+{
+    Serial.print("Left Wheel>> Encoder: ");
+    Serial.print(MotorLeft.getEncoderCount());
+    Serial.print(" | Right Wheel>> Encoder: ");
+    Serial.println(MotorRight.getEncoderCount());
+}
+
+/*
+    Due to the moment of inertia of the robot, the robot will not stop immediately
+    after the motors are stopped. The robot will continue to move for a short while.
+
+    This function is to test the drag of the robot at different speeds.
+*/
+void Robot::testDragAtDifferentSpeeds()
+{
+    int speeds[13] = {20, 30, 40, 50, 60, 70, 80, 90, 100, 120, 150, 200, 255};
+    Serial.println("*********************************");
+    Serial.println("Testing drag at different speeds. Copy the values to the spreadsheet.");
+    Serial.println("*********************************");
+    Serial.println("Speed, Stopped_wheel, Encoder_R, Encoder_L, Rotation_R, Rotation_L, Stopped_wheel, Encoder_R, Encoder_L, Rotation_R, Rotation_L, Encoder_R_Drag, Encoder_L_Drag, Rotation_R_Drag, Rotation_L_Drag");
+
+    for (int i : speeds)
+    {
+        Serial.print(i);
+        Serial.print(", ");
+
+        bool leftMoving = true;
+        bool rightMoving = true;
+
+        resetWheelEncoders();
+
+        // move forward
+        MotorLeft.forward(i);
+        MotorRight.forward(i);
+
+        while (leftMoving || rightMoving)
+        {
+            if (getRightWheelRotationCount() >= 1.0 && rightMoving)
+            {
+                MotorRight.brake();
+                rightMoving = false;
+
+                Serial.print("Right,");
+                Serial.print(getRightWheelEncoderCount());
+                Serial.print(",");
+                Serial.print(getLeftWheelEncoderCount());
+                Serial.print(",");
+                Serial.print(getRightWheelRotationCount());
+                Serial.print(",");
+                Serial.print(getLeftWheelRotationCount());
+                Serial.print(",");
+            }
+            if (getLeftWheelRotationCount() >= 1.0 && leftMoving)
+            {
+                MotorLeft.brake();
+                leftMoving = false;
+
+                Serial.print("Left,");
+                Serial.print(getRightWheelEncoderCount());
+                Serial.print(",");
+                Serial.print(getLeftWheelEncoderCount());
+                Serial.print(",");
+                Serial.print(getRightWheelRotationCount());
+                Serial.print(",");
+                Serial.print(getLeftWheelRotationCount());
+                Serial.print(",");
+            }
+        }
+
+        // both wheels stopped
+        resetWheelEncoders();
+
+        // Wait for 3 seconds for the drag to settle
+        delay(3000);
+
+        Serial.print(getRightWheelEncoderCount());
+        Serial.print(",");
+        Serial.print(getLeftWheelEncoderCount());
+        Serial.print(",");
+        Serial.print(getRightWheelRotationCount());
+        Serial.print(",");
+        Serial.println(getLeftWheelRotationCount());
+    }
+
+    while (true)
+    {
+        // do nothing
+    }
+}
+
+// Test the motors
+void Robot::testMotors()
+{
+    MotorLeft.forward(255);
+    MotorRight.forward(255);
+    delay(1000);
+    MotorLeft.brake();
+    MotorRight.brake();
+    delay(1000);
+    MotorLeft.reverse(255);
+    MotorRight.reverse(255);
+    delay(1000);
+    MotorLeft.brake();
+    MotorRight.brake();
+    delay(1000);
+    MotorLeft.forward(255);
+    MotorRight.reverse(255);
+    delay(1000);
+    MotorLeft.brake();
+    MotorRight.brake();
+    delay(1000);
+    MotorLeft.reverse(255);
+    MotorRight.forward(255);
+    delay(1000);
+    MotorLeft.brake();
+    MotorRight.brake();
+    delay(1000);
 }
