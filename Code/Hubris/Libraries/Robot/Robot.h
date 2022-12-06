@@ -12,7 +12,7 @@
 class Robot
 {
 public:
-    Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int motorLeftPin1, int motorLeftPin2, int motorLeftStandbyPin, int motorLeftPwmPin, int motorLeftEncoderChannel_A_Pin, int motorLeftEncoderChannel_B_Pin, int motorRightPin1, int motorRightPin2, int motorRightStandbyPin, int motorRightPwmPin, int motorRightEncoderChannel_A_Pin, int motorRightEncoderChannel_B_Pin, int batteryVoltagePin);
+    Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int motorLeftPin1, int motorLeftPin2, int motorLeftStandbyPin, int motorLeftPwmPin, int motorLeftEncoderChannel_A_Pin, int motorLeftEncoderChannel_B_Pin, int motorRightPin1, int motorRightPin2, int motorRightStandbyPin, int motorRightPwmPin, int motorRightEncoderChannel_A_Pin, int motorRightEncoderChannel_B_Pin, int batteryVoltagePin, int markerSwitchPin);
     void init();
     // state
     int getState();
@@ -57,6 +57,8 @@ public:
     void testMotors();
     void logEncoderValues();
     void testDragAtDifferentSpeeds();
+    void findMovingForwardCorrectionFactor();
+    bool isMarkerSwitchPressed();
 
 private:
     IR IRLeft;
@@ -71,6 +73,7 @@ private:
     float steeringFactor;
     int steeringCooloffTime;
     short int state;
+    short int markerSwitchPin;
 };
 
 #endif

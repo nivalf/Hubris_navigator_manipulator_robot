@@ -29,6 +29,8 @@
         UltrasonicTrigPin
         -
         batteryVoltagePin
+        - 
+        markerSwitchPin
 
  *  instantiates:
         IRLeft
@@ -37,13 +39,14 @@
         MotorRight
         UltrasonicFront
  */
-Robot::Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int motorLeftPin1, int motorLeftPin2, int motorLeftStandbyPin, int motorLeftPwmPin, int motorLeftEncoderChannel_A_Pin, int motorLeftEncoderChannel_B_Pin, int motorRightPin1, int motorRightPin2, int motorRightStandbyPin, int motorRightPwmPin, int motorRightEncoderChannel_A_Pin, int motorRightEncoderChannel_B_Pin, int batteryVoltagePin) : // private variables
+Robot::Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int motorLeftPin1, int motorLeftPin2, int motorLeftStandbyPin, int motorLeftPwmPin, int motorLeftEncoderChannel_A_Pin, int motorLeftEncoderChannel_B_Pin, int motorRightPin1, int motorRightPin2, int motorRightStandbyPin, int motorRightPwmPin, int motorRightEncoderChannel_A_Pin, int motorRightEncoderChannel_B_Pin, int batteryVoltagePin, int markerSwitchPin) : // private variables
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       state(0),
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       speed(speed),
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       defaultSpeed(speed),
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       turnSpeed(turnSpeed),
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       steeringFactor(steeringFactor),
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       steeringCooloffTime(steeringCooloffTime),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      markerSwitchPin(markerSwitchPin),
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       // member classes
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       IRLeft(IRLeftPin),
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       IRRight(IRRightPin),
@@ -52,14 +55,17 @@ Robot::Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloff
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       MotorRight(motorRightPin1, motorRightPin2, motorRightPwmPin, motorRightStandbyPin, motorRightEncoderChannel_A_Pin, motorRightEncoderChannel_B_Pin),
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       RobotBatteryVoltage(batteryVoltagePin)
 {
+    
+    pinMode(markerSwitchPin, INPUT_PULLUP);
 }
 
 // 1.146067
 // SPIN CIRCUMFERENCE
 // const float CORRECTION_FACTOR = 1.13;
-const float CORRECTION_FACTOR = 1.08;
-const float WHEEL_CIRCUMFERENCE = 21.7;                      // in cm
-const float ROTATION_FOR_QUARTER_SPIN_CIRCUMFERENCE = 0.693; // rotation of the wheel to move quarter of the circle
+const float CORRECTION_FACTOR = 1.09;
+const float TURN_CORRECTION_FACTOR = 1.12;
+const float WHEEL_CIRCUMFERENCE = 21.7;                     // in cm
+const float ROTATION_FOR_QUARTER_SPIN_CIRCUMFERENCE = 0.705; // rotation of the wheel to move quarter of the circle
 
 // Initialize the robot
 void Robot::init()
@@ -89,6 +95,11 @@ float Robot::getFrontDistance()
     // logUltraSonicSensorValues();
     // logWheelStats();
     return UltrasonicFront.getDistance();
+}
+
+bool Robot::isMarkerSwitchPressed()
+{
+    return !digitalRead(markerSwitchPin);   // ! since pullup resistor is used
 }
 
 // ***************** SPEED ***************** //
@@ -126,7 +137,7 @@ void Robot::turn90Left()
     // reOrient();
     resetWheelEncoders();
 
-    MotorLeft.reverse(turnSpeed);
+    MotorLeft.reverse((int) TURN_CORRECTION_FACTOR * turnSpeed);
     MotorRight.forward(turnSpeed);
 
     bool turning = true;
@@ -504,10 +515,18 @@ void Robot::testDragAtDifferentSpeeds()
         Serial.println(getLeftWheelRotationCount());
     }
 
+    // stop the loop on completion
     while (true)
     {
         // do nothing
     }
+}
+
+// Find the correction factor for the left wheel
+void Robot::findMovingForwardCorrectionFactor()
+{
+    moveForward();
+    Serial.println((float)getRightWheelEncoderCount() / getLeftWheelEncoderCount());
 }
 
 // Test the motors

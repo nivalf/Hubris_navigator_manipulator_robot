@@ -37,7 +37,7 @@ void IR_US_operate() {
       }
       break;
     case 6:
-      if (Hubris.getFrontDistance() < 6.0) {
+      if (Hubris.isMarkerSwitchPressed()) {
         // Hubris.reOrient();
         Hubris.moveBackward();
         Hubris.setState(7);

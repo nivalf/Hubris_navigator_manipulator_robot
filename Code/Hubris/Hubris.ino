@@ -3,6 +3,8 @@
 // IR pins
 #define IRLeftAPin A5
 #define IRRightAPin A4
+
+#define markerSwitchPin A3
 // BatteryVoltage
 #define batteryVoltagePin A0
 // use same pin for trig & echo
@@ -24,7 +26,7 @@
 #define motorRightEncoderChannel_A_Pin 3
 #define motorRightEncoderChannel_B_Pin 5
 
-#define speed 150
+#define speed 100
 #define reducedSpeed 30
 #define lineFollowSpeed 40
 #define turnSpeed 50
@@ -32,7 +34,7 @@
 #define steeringFactor 0.2  // percentage
 #define steeringCooloffTime 30
 
-Robot Hubris(speed, turnSpeed, steeringFactor, steeringCooloffTime, IRLeftAPin, IRRightAPin, trigPin, echoPin, motorLeftPin1, motorLeftPin2, motorLeftStandbyPin, motorLeftPWMPin, motorLeftEncoderChannel_A_Pin, motorLeftEncoderChannel_B_Pin, motorRightPin2, motorRightPin1, motorRightStandbyPin, motorRightPWMPin, motorRightEncoderChannel_A_Pin, motorRightEncoderChannel_B_Pin, batteryVoltagePin);
+Robot Hubris(speed, turnSpeed, steeringFactor, steeringCooloffTime, IRLeftAPin, IRRightAPin, trigPin, echoPin, motorLeftPin1, motorLeftPin2, motorLeftStandbyPin, motorLeftPWMPin, motorLeftEncoderChannel_A_Pin, motorLeftEncoderChannel_B_Pin, motorRightPin2, motorRightPin1, motorRightStandbyPin, motorRightPWMPin, motorRightEncoderChannel_A_Pin, motorRightEncoderChannel_B_Pin, batteryVoltagePin, markerSwitchPin);
 
 long timestamp;
 int count = 0;
@@ -61,9 +63,11 @@ void setup(void) {
 
 void loop(void) {
   timestamp = millis();
-  // IR_US_operate();
+  IR_US_operate();
 
-  Hubris.testDragAtDifferentSpeeds();
+  // Hubris.testSensors();
+
+  // Hubris.findMovingForwardCorrectionFactor();
 
   // Serial.print("Runtime:");
   // Serial.print(millis() - timestamp);
