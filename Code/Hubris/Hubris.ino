@@ -8,23 +8,23 @@
 // BatteryVoltage
 #define batteryVoltagePin A0
 // use same pin for trig & echo
-#define trigPin 6
-#define echoPin 6
+#define trigPin 10  // 6
+#define echoPin 10
 
 // pins for left motor
 #define motorLeftPin1 7
 #define motorLeftPin2 8
 #define motorLeftStandbyPin 9
-#define motorLeftPWMPin 10
+#define motorLeftPWMPin 6 //10
 #define motorLeftEncoderChannel_A_Pin 2
 #define motorLeftEncoderChannel_B_Pin 4
 // pins for right motor
 #define motorRightPin1 12
 #define motorRightPin2 13
 #define motorRightStandbyPin 9
-#define motorRightPWMPin 11
+#define motorRightPWMPin 5 // 11
 #define motorRightEncoderChannel_A_Pin 3
-#define motorRightEncoderChannel_B_Pin 5
+#define motorRightEncoderChannel_B_Pin 11 // 5
 
 #define speed 100
 #define reducedSpeed 30
@@ -51,7 +51,7 @@ void motorRightISR() {
 void setup(void) {
   Serial.begin(9600);  // We'll send debugging information via the Serial monitor
 
-  // Attaching interrupt to pins for encoder
+  //Attaching interrupt to pins for encoder
   attachInterrupt(digitalPinToInterrupt(motorLeftEncoderChannel_A_Pin), motorLeftISR, RISING);
   attachInterrupt(digitalPinToInterrupt(motorRightEncoderChannel_A_Pin), motorRightISR, RISING);
 

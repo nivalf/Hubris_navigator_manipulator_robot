@@ -64,7 +64,6 @@ Robot::Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloff
 // const float CORRECTION_FACTOR = 1.13;
 const float CORRECTION_FACTOR = 1.09;
 const float TURN_CORRECTION_FACTOR = 1.12;
-const float WHEEL_CIRCUMFERENCE = 21.7;                     // in cm
 const float ROTATION_FOR_QUARTER_SPIN_CIRCUMFERENCE = 0.705; // rotation of the wheel to move quarter of the circle
 
 // Initialize the robot
