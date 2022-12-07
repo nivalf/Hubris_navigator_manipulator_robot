@@ -25,7 +25,7 @@
         UltrasonicTrigPin
         -
         batteryVoltagePin
-        - 
+        -
         markerSwitchPin
 
  *  instantiates:
@@ -36,33 +36,28 @@
         UltrasonicFront
  */
 Robot::Robot(int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int motorLeftPin1, int motorLeftPin2, int motorLeftStandbyPin, int motorLeftPwmPin, int motorLeftEncoderChannel_A_Pin, int motorLeftEncoderChannel_B_Pin, int motorRightPin1, int motorRightPin2, int motorRightStandbyPin, int motorRightPwmPin, int motorRightEncoderChannel_A_Pin, int motorRightEncoderChannel_B_Pin, int batteryVoltagePin, int markerSwitchPin) : // private variables
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      state(0),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      speed(SPEED),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      turnSpeed(TURN_SPEED),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      markerSwitchPin(markerSwitchPin),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      // member classes
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      IRLeft(IRLeftPin),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      IRRight(IRRightPin),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      UltrasonicFront(UltrasonicEchoPin, UltrasonicTrigPin),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      MotorLeft(motorLeftPin1, motorLeftPin2, motorLeftPwmPin, motorLeftStandbyPin, motorLeftEncoderChannel_A_Pin, motorLeftEncoderChannel_B_Pin),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      MotorRight(motorRightPin1, motorRightPin2, motorRightPwmPin, motorRightStandbyPin, motorRightEncoderChannel_A_Pin, motorRightEncoderChannel_B_Pin),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      RobotBatteryVoltage(batteryVoltagePin)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  markerSwitchPin(markerSwitchPin),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  // member classes
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  IRLeft(IRLeftPin),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  IRRight(IRRightPin),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  UltrasonicFront(UltrasonicEchoPin, UltrasonicTrigPin),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  MotorLeft(motorLeftPin1, motorLeftPin2, motorLeftPwmPin, motorLeftStandbyPin, motorLeftEncoderChannel_A_Pin, motorLeftEncoderChannel_B_Pin),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  MotorRight(motorRightPin1, motorRightPin2, motorRightPwmPin, motorRightStandbyPin, motorRightEncoderChannel_A_Pin, motorRightEncoderChannel_B_Pin),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  RobotBatteryVoltage(batteryVoltagePin)
 {
-    
+
     pinMode(markerSwitchPin, INPUT_PULLUP);
 }
-
-// 1.146067
-// SPIN CIRCUMFERENCE
-// const float CORRECTION_FACTOR = 1.13;
-const float CORRECTION_FACTOR = 1.09;
-const float TURN_CORRECTION_FACTOR = 1.12;
-const float ROTATION_FOR_QUARTER_SPIN_CIRCUMFERENCE = 0.705; // rotation of the wheel to move quarter of the circle
 
 // Initialize the robot
 void Robot::init()
 {
     RobotBatteryVoltage.checkVoltage();
+
+    setState(0);
+    setSpeed(SPEED);
+    setTurnSpeed(TURN_SPEED);
+
     IRLeft.init();
     IRRight.init();
     MotorLeft.init();
@@ -91,7 +86,7 @@ float Robot::getFrontDistance()
 
 bool Robot::isMarkerSwitchPressed()
 {
-    return !digitalRead(markerSwitchPin);   // ! since pullup resistor is used
+    return !digitalRead(markerSwitchPin); // ! since pullup resistor is used
 }
 
 // ***************** SPEED ***************** //
@@ -105,6 +100,16 @@ void Robot::setSpeed(short int speed)
 void Robot::resetSpeed()
 {
     this->speed = SPEED;
+}
+
+void Robot::setTurnSpeed(short int turnSpeed)
+{
+    this->turnSpeed = turnSpeed;
+}
+
+void Robot::resetTurnSpeed()
+{
+    this->turnSpeed = TURN_SPEED;
 }
 // ***************** BASIC MOVEMENT ***************** //
 
@@ -123,13 +128,34 @@ void Robot::moveBackward()
     MotorRight.reverse(speed);
 }
 
+// Steer the robot left
+void Robot::steerLeft()
+{
+    moveForwardCurveLeft(speed * (1 + STEERING_FACTOR));
+}
+
+// Steer the robot right
+void Robot::steerRight()
+{
+    moveForwardCurveRight(speed * (1 + STEERING_FACTOR));
+}
+
+// Stop the bot
+void Robot::stop()
+{
+    MotorLeft.brake();
+    MotorRight.brake();
+}
+
+// ***************** TURNING MOVEMENT ***************** //
+
 // Turn the robot left 90 degrees
 void Robot::turn90Left()
 {
     // reOrient();
     resetWheelEncoders();
 
-    MotorLeft.reverse((int) TURN_CORRECTION_FACTOR * turnSpeed);
+    MotorLeft.reverse((int)TURN_CORRECTION_FACTOR * turnSpeed);
     MotorRight.forward(turnSpeed);
 
     bool turning = true;
@@ -173,53 +199,54 @@ void Robot::turn360Left()
     }
 }
 
-// Steer the robot left
-void Robot::steerLeft()
-{
-    moveForwardCurveLeft(speed * (1 + STEERING_FACTOR));
+void Robot::orient90ccw() {
+    bool turning = true;
+
+    while(turning) {
+        setTurnSpeed(ORIENTATION_TURN_SPEED);
+        moveForwardCurveLeft(3);
+
+        if(orientedAbove90()) {
+            turning = false;
+        }
+    }
+
+    stop();
+    resetTurnSpeed();
 }
 
-// Steer the robot right
-void Robot::steerRight()
-{
-    moveForwardCurveRight(speed * (1 + STEERING_FACTOR));
-}
-
-// Stop the bot
-void Robot::stop()
-{
-    MotorLeft.brake();
-    MotorRight.brake();
+bool Robot::orientedAbove90() {
+    return getEncoderDifference() >= ENCODER_DIFF_FOR_90_DEGREE_ORIENTATION;
 }
 
 // ***************** CURVED MOVEMENT ***************** //
 /*
     Functions to move the robot forward and backward with a curve
     @params:
-        wheelSpeedRatio: ratio of the speed of the higher speed wheel to the lower speed wheel
+        oppWheelSpeedFactor: ratio of the speed of the higher speed wheel to the lower speed wheel
         i.e., For a right curve, the left wheel will be moving at a higher speed than the right wheel
 */
-void Robot::moveForwardCurveLeft(float wheelSpeedRatio)
+void Robot::moveForwardCurveLeft(float oppWheelSpeedFactor)
 {
     MotorLeft.forward(turnSpeed);
-    MotorRight.forward(turnSpeed * (1 + wheelSpeedRatio));
+    MotorRight.forward(turnSpeed * oppWheelSpeedFactor);
 }
 
-void Robot::moveForwardCurveRight(float wheelSpeedRatio)
+void Robot::moveForwardCurveRight(float oppWheelSpeedFactor)
 {
-    MotorLeft.forward(turnSpeed * (1 + wheelSpeedRatio));
+    MotorLeft.forward(turnSpeed * oppWheelSpeedFactor);
     MotorRight.forward(turnSpeed);
 }
 
-void Robot::moveBackwardCurveLeft(float wheelSpeedRatio)
+void Robot::moveBackwardCurveLeft(float oppWheelSpeedFactor)
 {
     MotorLeft.reverse(turnSpeed);
-    MotorRight.reverse(turnSpeed * (1 + wheelSpeedRatio));
+    MotorRight.reverse(turnSpeed * oppWheelSpeedFactor);
 }
 
-void Robot::moveBackwardCurveRight(float wheelSpeedRatio)
+void Robot::moveBackwardCurveRight(float oppWheelSpeedFactor)
 {
-    MotorLeft.reverse(turnSpeed * (1 + wheelSpeedRatio));
+    MotorLeft.reverse(turnSpeed * oppWheelSpeedFactor);
     MotorRight.reverse(turnSpeed);
 }
 
@@ -341,6 +368,12 @@ float Robot::getRightWheelRotationCount()
 float Robot::getRightWheelAngle()
 {
     return (-1.0) * MotorRight.getWheelAngle();
+}
+
+// Difference in the encoder count of the two wheels
+int Robot::getEncoderDifference()
+{
+    return abs(getLeftWheelEncoderCount() - getRightWheelEncoderCount());
 }
 
 // Reset the encoder values of each motor

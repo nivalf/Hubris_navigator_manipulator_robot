@@ -22,20 +22,25 @@ public:
     // speed
     void setSpeed(short int speed);
     void resetSpeed();
+    void setTurnSpeed(short int speed);
+    void resetTurnSpeed();
     // basic movement
     void moveForward();
     void moveBackward();
-    void turn90Left();
-    void turn360Left();
     void steerLeft();
     void steerRight(); 
     void stop();
+    // turns    
+    void turn90Left();
+    void turn360Left();
+    void orient90ccw();
+    bool orientedAbove90();
 
     // curve movement
-    void moveForwardCurveLeft(float wheelSpeedRatio);
-    void moveForwardCurveRight(float wheelSpeedRatio);
-    void moveBackwardCurveLeft(float wheelSpeedRatio);
-    void moveBackwardCurveRight(float wheelSpeedRatio);
+    void moveForwardCurveLeft(float oppWheelSpeedFactor);
+    void moveForwardCurveRight(float oppWheelSpeedFactor);
+    void moveBackwardCurveLeft(float oppWheelSpeedFactor);
+    void moveBackwardCurveRight(float oppWheelSpeedFactor);
 
     // advanced movement
     void followLine();   
@@ -52,6 +57,7 @@ public:
     float getRightWheelRotationCount();
     float getLeftWheelAngle();
     float getRightWheelAngle();
+    int getEncoderDifference();
     void resetWheelEncoders();
     void reOrient();
     // trials
