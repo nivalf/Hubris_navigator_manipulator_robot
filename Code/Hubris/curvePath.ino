@@ -1,6 +1,7 @@
 void curve_path() {
   switch (Hubris.getState()) {
     case 0:
+      // circle radius : 77
       Hubris.moveForwardCurveLeft(1.20);
       Hubris.setState(1);
       break;
@@ -25,6 +26,7 @@ void curve_path() {
       break;
     case 4:
       if (Hubris.isMarkerSwitchPressed()) {
+        // circle radius: 20
         Hubris.setTurnSpeed(10);
         Hubris.moveBackwardCurveLeft(8);
         Hubris.setState(5);
@@ -33,25 +35,32 @@ void curve_path() {
     case 5:
       if (Hubris.orientedAbove90()) {
         Hubris.resetWheelEncoders();
-        Hubris.resetTurnSpeed();
-        Hubris.moveBackwardCurveRight(1.4);
+        Hubris.setSpeed(50);
+        Hubris.moveBackward();
         Hubris.setState(6);
       }
       break;
     case 6:
+      if (Hubris.completedWheelRotation(1.4)) {
+        Hubris.resetWheelEncoders();
+        Hubris.setTurnSpeed(30);
+        Hubris.moveBackwardCurveRight(1.8);
+        Hubris.setState(7);
+      }
+    case 7:
       if (Hubris.reachedBlackLine()) {
         Hubris.orient90cw();
         Hubris.resetWheelEncoders();
-        Hubris.setState(7);
+        Hubris.setState(8);
       }
       break;
-    case 7:  // go forward
+    case 8:  // go forward
       Hubris.setSpeed(50);
       Hubris.moveBackward();
-      Hubris.setState(8);
+      Hubris.setState(9);
       break;
-    case 8:
-      if (Hubris.getFrontDistance() > 85.0) {
+    case 9:
+      if (Hubris.completedWheelRotation(2.35)) {
         Hubris.stop();
       }
       break;

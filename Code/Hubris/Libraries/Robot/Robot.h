@@ -62,6 +62,7 @@ public:
     int getEncoderDifference();
     void resetWheelEncoders();
     bool completedOneWheelRotation();
+    bool completedWheelRotation(float rotationCount);
     void reOrient();
     // trials
     void moveOneWheelLength();

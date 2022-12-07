@@ -199,25 +199,30 @@ void Robot::turn360Left()
     }
 }
 
-void Robot::orient90ccw() {
+void Robot::orient90ccw()
+{
     orient90(1);
 }
 
-void Robot::orient90cw() {
+void Robot::orient90cw()
+{
     orient90(0);
 }
 
 // Orient the robot to 90 degrees relative to the starting position
 // @params:
 //      direction: 1 for front ccw, 0 for back cw
-void Robot::orient90(short int direction) {
+void Robot::orient90(short int direction)
+{
     bool turning = true;
 
-    while(turning) {
+    while (turning)
+    {
         setTurnSpeed(ORIENTATION_TURN_SPEED);
-         direction ? moveForwardCurveLeft(3) : moveBackwardCurveRight(3);
+        direction ? moveForwardCurveLeft(3) : moveBackwardCurveRight(3);
 
-        if(orientedAbove90()) {
+        if (orientedAbove90())
+        {
             turning = false;
         }
     }
@@ -226,7 +231,8 @@ void Robot::orient90(short int direction) {
     resetTurnSpeed();
 }
 
-bool Robot::orientedAbove90() {
+bool Robot::orientedAbove90()
+{
     return getEncoderDifference() >= ENCODER_DIFF_FOR_90_DEGREE_ORIENTATION;
 }
 
@@ -395,8 +401,15 @@ void Robot::resetWheelEncoders()
 }
 
 // Check if one wheel rotation is completed
-bool Robot::completedOneWheelRotation() {
-    return (getLeftWheelRotationCount() >= 1.0 || getRightWheelRotationCount() >= 1.0);
+bool Robot::completedOneWheelRotation()
+{
+    return completedWheelRotation(1.0);
+}
+
+// Check if specified rotation is completed
+bool Robot::completedWheelRotation(float rotationCount)
+{
+    return (abs(getLeftWheelRotationCount()) >= rotationCount || abs(getRightWheelRotationCount()) >= rotationCount);
 }
 
 // ReOrient the robot to straight position. The bot gets tilted due to difference in the motors

@@ -59,6 +59,7 @@ void setup(void) {
 void loop(void) {
   timestamp = millis();
   curve_path();
+  
   // IR_US_operate();
 
   // Hubris.testSensors();
