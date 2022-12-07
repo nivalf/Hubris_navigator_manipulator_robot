@@ -12,7 +12,7 @@
 class Robot
 {
 public:
-    Robot(float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int motorLeftPin1, int motorLeftPin2, int motorLeftStandbyPin, int motorLeftPwmPin, int motorLeftEncoderChannel_A_Pin, int motorLeftEncoderChannel_B_Pin, int motorRightPin1, int motorRightPin2, int motorRightStandbyPin, int motorRightPwmPin, int motorRightEncoderChannel_A_Pin, int motorRightEncoderChannel_B_Pin, int batteryVoltagePin, int markerSwitchPin);
+    Robot(int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int motorLeftPin1, int motorLeftPin2, int motorLeftStandbyPin, int motorLeftPwmPin, int motorLeftEncoderChannel_A_Pin, int motorLeftEncoderChannel_B_Pin, int motorRightPin1, int motorRightPin2, int motorRightStandbyPin, int motorRightPwmPin, int motorRightEncoderChannel_A_Pin, int motorRightEncoderChannel_B_Pin, int batteryVoltagePin, int markerSwitchPin);
     void init();
     // state
     int getState();
@@ -30,6 +30,12 @@ public:
     void steerLeft();
     void steerRight(); 
     void stop();
+
+    // curve movement
+    void moveForwardCurveLeft(float wheelSpeedRatio);
+    void moveForwardCurveRight(float wheelSpeedRatio);
+    void moveBackwardCurveLeft(float wheelSpeedRatio);
+    void moveBackwardCurveRight(float wheelSpeedRatio);
 
     // advanced movement
     void followLine();   
@@ -69,8 +75,6 @@ private:
     BatteryVoltage RobotBatteryVoltage; 
     int speed;
     int turnSpeed;
-    float steeringFactor;
-    int steeringCooloffTime;
     short int state;
     short int markerSwitchPin;
 };

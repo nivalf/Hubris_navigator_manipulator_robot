@@ -4,9 +4,6 @@
 
 /*  Constructor
  *  @param
-        steeringFactor: the percentage difference between the speed of the left and right motors when turning
-        steeringCooloffTime: the time in milliseconds that the robot will wait after turning before moving forward again
-
         IRLeftpin
         IRRightpin
         -
@@ -38,12 +35,10 @@
         MotorRight
         UltrasonicFront
  */
-Robot::Robot(float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int motorLeftPin1, int motorLeftPin2, int motorLeftStandbyPin, int motorLeftPwmPin, int motorLeftEncoderChannel_A_Pin, int motorLeftEncoderChannel_B_Pin, int motorRightPin1, int motorRightPin2, int motorRightStandbyPin, int motorRightPwmPin, int motorRightEncoderChannel_A_Pin, int motorRightEncoderChannel_B_Pin, int batteryVoltagePin, int markerSwitchPin) : // private variables
+Robot::Robot(int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int motorLeftPin1, int motorLeftPin2, int motorLeftStandbyPin, int motorLeftPwmPin, int motorLeftEncoderChannel_A_Pin, int motorLeftEncoderChannel_B_Pin, int motorRightPin1, int motorRightPin2, int motorRightStandbyPin, int motorRightPwmPin, int motorRightEncoderChannel_A_Pin, int motorRightEncoderChannel_B_Pin, int batteryVoltagePin, int markerSwitchPin) : // private variables
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       state(0),
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       speed(SPEED),
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       turnSpeed(TURN_SPEED),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      steeringFactor(steeringFactor),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      steeringCooloffTime(steeringCooloffTime),
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       markerSwitchPin(markerSwitchPin),
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       // member classes
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       IRLeft(IRLeftPin),
@@ -181,15 +176,13 @@ void Robot::turn360Left()
 // Steer the robot left
 void Robot::steerLeft()
 {
-    MotorLeft.forward(speed);
-    MotorRight.forward(speed * (1 + steeringFactor));
+    moveForwardCurveLeft(speed * (1 + STEERING_FACTOR));
 }
 
 // Steer the robot right
 void Robot::steerRight()
 {
-    MotorLeft.forward(speed * (1 + steeringFactor));
-    MotorRight.forward(speed);
+    moveForwardCurveRight(speed * (1 + STEERING_FACTOR));
 }
 
 // Stop the bot
@@ -197,6 +190,37 @@ void Robot::stop()
 {
     MotorLeft.brake();
     MotorRight.brake();
+}
+
+// ***************** CURVED MOVEMENT ***************** //
+/*
+    Functions to move the robot forward and backward with a curve
+    @params:
+        wheelSpeedRatio: ratio of the speed of the higher speed wheel to the lower speed wheel
+        i.e., For a right curve, the left wheel will be moving at a higher speed than the right wheel
+*/
+void Robot::moveForwardCurveLeft(float wheelSpeedRatio)
+{
+    MotorLeft.forward(turnSpeed);
+    MotorRight.forward(turnSpeed * (1 + wheelSpeedRatio));
+}
+
+void Robot::moveForwardCurveRight(float wheelSpeedRatio)
+{
+    MotorLeft.forward(turnSpeed * (1 + wheelSpeedRatio));
+    MotorRight.forward(turnSpeed);
+}
+
+void Robot::moveBackwardCurveLeft(float wheelSpeedRatio)
+{
+    MotorLeft.reverse(turnSpeed);
+    MotorRight.reverse(turnSpeed * (1 + wheelSpeedRatio));
+}
+
+void Robot::moveBackwardCurveRight(float wheelSpeedRatio)
+{
+    MotorLeft.reverse(turnSpeed * (1 + wheelSpeedRatio));
+    MotorRight.reverse(turnSpeed);
 }
 
 // ***************** ADVANCED MOVEMENT ***************** //
