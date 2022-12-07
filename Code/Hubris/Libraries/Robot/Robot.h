@@ -33,7 +33,9 @@ public:
     // turns    
     void turn90Left();
     void turn360Left();
+    void orient90(short int direction);
     void orient90ccw();
+    void orient90cw();
     bool orientedAbove90();
 
     // curve movement
@@ -59,6 +61,7 @@ public:
     float getRightWheelAngle();
     int getEncoderDifference();
     void resetWheelEncoders();
+    bool completedOneWheelRotation();
     void reOrient();
     // trials
     void moveOneWheelLength();
