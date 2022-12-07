@@ -41,7 +41,7 @@ void curve_path() {
       }
       break;
     case 6:
-      if (Hubris.completedWheelRotation(1.4)) {
+      if (Hubris.completedWheelRotation(1.3)) {
         Hubris.resetWheelEncoders();
         Hubris.setTurnSpeed(30);
         Hubris.moveBackwardCurveRight(1.8);
