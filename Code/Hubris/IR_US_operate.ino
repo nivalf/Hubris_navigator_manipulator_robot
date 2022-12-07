@@ -11,7 +11,7 @@ void IR_US_operate() {
     case 2:  // reduce speed
       if (Hubris.blackLineInProximity()) {
         Hubris.reOrient();
-        Hubris.setSpeed(reducedSpeed);
+        Hubris.setSpeed(REDUCED_SPEED);
         Hubris.moveForward();
         Hubris.setState(3);
       }
@@ -31,7 +31,7 @@ void IR_US_operate() {
     case 5:
       if (Hubris.getFrontDistance() < 20.0) {
         // Hubris.reOrient();
-        Hubris.setSpeed(reducedSpeed);
+        Hubris.setSpeed(REDUCED_SPEED);
         Hubris.moveForward();
         Hubris.setState(6);
       }
@@ -58,7 +58,7 @@ void IR_US_operate() {
     case 9:  // reduce speed
       if (Hubris.blackLineInProximity()) {
         // Hubris.reOrient();
-        Hubris.setSpeed(reducedSpeed);
+        Hubris.setSpeed(REDUCED_SPEED);
         Hubris.moveForward();
         Hubris.setState(10);
       }
@@ -78,7 +78,7 @@ void IR_US_operate() {
     case 12:
       if (Hubris.getFrontDistance() < 20.0) {
         // Hubris.reOrient();
-        Hubris.setSpeed(reducedSpeed);
+        Hubris.setSpeed(REDUCED_SPEED);
         Hubris.moveForward();
         Hubris.setState(13);
       }

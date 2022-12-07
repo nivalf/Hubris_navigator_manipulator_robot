@@ -7,7 +7,7 @@ void ultraSonicMode() {
       break;
     case 1:  // reduce speed
       if (Hubris.getFrontDistance() < 35.0) {
-        Hubris.setSpeed(reducedSpeed);
+        Hubris.setSpeed(REDUCED_SPEED);
         Hubris.moveForward();
         Hubris.setState(2);
       }
@@ -25,7 +25,7 @@ void ultraSonicMode() {
       break;
     case 4:
       if (Hubris.getFrontDistance() < 20.0) {
-        Hubris.setSpeed(reducedSpeed);
+        Hubris.setSpeed(REDUCED_SPEED);
         Hubris.moveForward();
         Hubris.setState(5);
       }

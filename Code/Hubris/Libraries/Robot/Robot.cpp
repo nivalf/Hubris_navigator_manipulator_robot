@@ -1,10 +1,9 @@
 #include "Arduino.h"
 #include "Robot.h"
+#include "Constants.h"
 
 /*  Constructor
  *  @param
-        speed: speed of the robot when moving forward or backward
-        turnSpeed: speed of the robot when turning
         steeringFactor: the percentage difference between the speed of the left and right motors when turning
         steeringCooloffTime: the time in milliseconds that the robot will wait after turning before moving forward again
 
@@ -39,11 +38,10 @@
         MotorRight
         UltrasonicFront
  */
-Robot::Robot(int speed, int turnSpeed, float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int motorLeftPin1, int motorLeftPin2, int motorLeftStandbyPin, int motorLeftPwmPin, int motorLeftEncoderChannel_A_Pin, int motorLeftEncoderChannel_B_Pin, int motorRightPin1, int motorRightPin2, int motorRightStandbyPin, int motorRightPwmPin, int motorRightEncoderChannel_A_Pin, int motorRightEncoderChannel_B_Pin, int batteryVoltagePin, int markerSwitchPin) : // private variables
+Robot::Robot(float steeringFactor, int steeringCooloffTime, int IRLeftPin, int IRRightPin, int UltrasonicTrigPin, int UltrasonicEchoPin, int motorLeftPin1, int motorLeftPin2, int motorLeftStandbyPin, int motorLeftPwmPin, int motorLeftEncoderChannel_A_Pin, int motorLeftEncoderChannel_B_Pin, int motorRightPin1, int motorRightPin2, int motorRightStandbyPin, int motorRightPwmPin, int motorRightEncoderChannel_A_Pin, int motorRightEncoderChannel_B_Pin, int batteryVoltagePin, int markerSwitchPin) : // private variables
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       state(0),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      speed(speed),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      defaultSpeed(speed),
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      turnSpeed(turnSpeed),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      speed(SPEED),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      turnSpeed(TURN_SPEED),
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       steeringFactor(steeringFactor),
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       steeringCooloffTime(steeringCooloffTime),
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       markerSwitchPin(markerSwitchPin),
@@ -111,7 +109,7 @@ void Robot::setSpeed(short int speed)
 // reset the speed to the default speed
 void Robot::resetSpeed()
 {
-    this->speed = this->defaultSpeed;
+    this->speed = SPEED;
 }
 // ***************** BASIC MOVEMENT ***************** //
 

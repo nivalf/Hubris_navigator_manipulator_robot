@@ -10,7 +10,7 @@ void operate() {
       break;
     case 2:  // reduce speed
       if (Hubris.blackLineInProximity()) {
-        Hubris.setSpeed(reducedSpeed);
+        Hubris.setSpeed(REDUCED_SPEED);
         Hubris.moveForward();
         Hubris.setState(3);
       }

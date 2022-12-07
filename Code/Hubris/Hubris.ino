@@ -1,4 +1,5 @@
 #include "Robot.h"
+#include "Constants.h"
 
 // IR pins
 #define IRLeftAPin A5
@@ -26,15 +27,12 @@
 #define motorRightEncoderChannel_A_Pin 3
 #define motorRightEncoderChannel_B_Pin 11 // 5
 
-#define speed 100
-#define reducedSpeed 30
 #define lineFollowSpeed 40
-#define turnSpeed 50
 
 #define steeringFactor 0.2  // percentage
 #define steeringCooloffTime 30
 
-Robot Hubris(speed, turnSpeed, steeringFactor, steeringCooloffTime, IRLeftAPin, IRRightAPin, trigPin, echoPin, motorLeftPin1, motorLeftPin2, motorLeftStandbyPin, motorLeftPWMPin, motorLeftEncoderChannel_A_Pin, motorLeftEncoderChannel_B_Pin, motorRightPin2, motorRightPin1, motorRightStandbyPin, motorRightPWMPin, motorRightEncoderChannel_A_Pin, motorRightEncoderChannel_B_Pin, batteryVoltagePin, markerSwitchPin);
+Robot Hubris(steeringFactor, steeringCooloffTime, IRLeftAPin, IRRightAPin, trigPin, echoPin, motorLeftPin1, motorLeftPin2, motorLeftStandbyPin, motorLeftPWMPin, motorLeftEncoderChannel_A_Pin, motorLeftEncoderChannel_B_Pin, motorRightPin2, motorRightPin1, motorRightStandbyPin, motorRightPWMPin, motorRightEncoderChannel_A_Pin, motorRightEncoderChannel_B_Pin, batteryVoltagePin, markerSwitchPin);
 
 long timestamp;
 int count = 0;
