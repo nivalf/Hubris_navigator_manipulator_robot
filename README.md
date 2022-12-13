@@ -6,7 +6,7 @@ Task:
 
 ## Navigation Modes:
 ### 1. Curved path
-- Move forward in a claculated curved path
+- Move forward in a calculated curved path
 - On detecting black line turn left & orient the bot to 90 degree from the start position.
 - Move forward and draw on the whiteboard
 - Reverse the bot again in a clockwise curve followed by a counter clockwise turn to reach the next black line.
