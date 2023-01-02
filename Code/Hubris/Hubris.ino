@@ -57,18 +57,14 @@ void setup(void) {
 }
 
 void loop(void) {
-  timestamp = millis();
-  curve_path();
-  
-  // IR_US_operate();
+  /*  
+    Write your code here. You may use to curePath.ino and the other .ino files for reference.
+    However, it is not required to write another .ino file, instead the code can be written directly here. 
 
-  // Hubris.testSensors();
+    Go through the libraries folder to find the classes for each component: Hubris, left motor, right motor.. Feel free to 
+    play with the individual functions or write them from scratch. I thought to delete those functions before handing this 
+    over to you, but instead it might be better to have them for reference. You can choose to rewrite or modify as required.
 
-  // Hubris.findMovingForwardCorrectionFactor();
-
-  // Serial.print("Runtime:");
-  // Serial.print(millis() - timestamp);
-  // Serial.println(' ');
-  // Serial.print("Hubris State:");
-  // Serial.println(Hubris.getState());
+    Happy Coding!
+  */
 }
